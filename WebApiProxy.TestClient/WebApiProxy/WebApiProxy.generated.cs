@@ -77,18 +77,6 @@ namespace WebApiProxy.TestClient.Models
 
 #endregion
 
-#region Interfaces
-
-namespace WebApiProxy.TestClient.Interfaces
-{
-	public interface IClientBase : IDisposable
-	{
-		HttpClient HttpClient { get; }
-	}
-}
-
-#endregion
-
 #region Clients
 
 namespace WebApiProxy.TestClient.Clients
@@ -96,7 +84,7 @@ namespace WebApiProxy.TestClient.Clients
 	/// <summary>
 	/// Client base class.
 	/// </summary>
-	public abstract partial class ClientBase : Interfaces.IClientBase, IDisposable
+	public abstract partial class ClientBase : IDisposable
 	{
 		/// <summary>
 		/// Gests the HttpClient.
@@ -199,7 +187,7 @@ namespace WebApiProxy.TestClient.Clients
 	{
 		public ValuesClient Values { get; }
 		
-		protected IEnumerable<Interfaces.IClientBase> Clients
+		protected IEnumerable<ClientBase> Clients
 		{
 			get
 			{
