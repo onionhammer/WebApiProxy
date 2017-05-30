@@ -34,6 +34,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\WebApiProxy.TestServer.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -257,6 +258,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebApiProxy.Core\WebApiProxy.Core.csproj">
+      <Project>{94508206-8537-4088-923b-e7fcb0539903}</Project>
+      <Name>WebApiProxy.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebApiProxy.Server\WebApiProxy.Server.csproj">
+      <Project>{4e5b8c2f-9008-4a17-abd1-a92e046c6a1e}</Project>
+      <Name>WebApiProxy.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

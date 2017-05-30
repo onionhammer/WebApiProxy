@@ -88,56 +88,56 @@
 	/* Proxies */
 
 	<# foreach(var definition in this.Metadata.Definitions) { #>
-	$.proxies.<#= definition.Name.ToLower() #> = {
+$.proxies.<#= definition.Name.ToLower() #> = {
 		defaultOptions: {},
 		antiForgeryToken: defaultAntiForgeryTokenAccessor,
-<# foreach(var method in definition.ActionMethods) { #>
-
-<#
+<# foreach(var method in definition.ActionMethods) { 
 	var allParameters = method.UrlParameters.AsEnumerable();
 	
-	if (method.BodyParameter != null) {
+	if (method.BodyParameter != null) 
 		allParameters = allParameters.Concat(new [] { method.BodyParameter });
-	}
+
 	var selectedParameters = allParameters.Where(m => m != null).Select(m => m.Name).ToList();
 	selectedParameters.Add("options");
 
 	var parameterList = string.Join(",", selectedParameters);
 
-	
-	
-	var url = ("\"" + method.Url.Replace("{", "\" + ").Replace("}", " + \"") + "\"").Replace(" + \"\"","");
-
+	var url = ("\"" + method.Url.Replace("{", "\" + ")
+		.Replace("}", " + \"") + "\"")
+		.Replace(" + \"\"","");
 #>
+		<#= method.Name.ToCamelCasing() #>: function(<#=parameterList#>) {
+			var defaults = { fields: [] };
+			var settings = $.extend({}, defaults, options || {});
+			var url	     = <#= url #>;
 
-
-	<#= method.Name.ToCamelCasing() #>: function(<#=parameterList#>) {
-		 var defaults = { fields: [] };
-         var settings = $.extend({}, defaults, options || {});
-		 var url = <#= url #>;
-
-		 if(settings.fields.length > 0) {
-		    url +=  url.indexOf("?") == -1 ? "?" : "&";
-			url += "fields=" + settings.fields.join();
-		 }
-
-		return invoke.call(this, url, "<#= method.Type.ToString().ToLower() #>", 
-		<# if (method.UrlParameters.Any()) { #>
-			{
-			<# foreach (var parameter in method.UrlParameters) { #>
-				<#= parameter.Name #>: <#= parameter.Name #>,
-			<# } #>
+			if(settings.fields.length > 0) {
+			    url +=  url.indexOf("?") == -1 ? "?" : "&";
+			    url += "fields=" + settings.fields.join();
 			}
-		<# } else { #>
-			{}
-		<# } #>
-		<# if (method.BodyParameter != null) { #>
-			, <#= method.BodyParameter.Name #>);
-		<# } else { #>
-			);
-		<# } #>
-	},
+
+			return invoke.call(this, url, "<#= method.Type.ToString().ToLower() #>",<#
+		if (method.UrlParameters.Any()) 
+		{
+			var parameters = string.Join(", ", method.UrlParameters.Select(parameter => $"{parameter.Name}: {parameter.Name}"));
+			#> { <#=parameters#> }<# 
+		}
+		else 
+		{ 
+			#>{}<#
+		}
+		if (method.BodyParameter != null) 
+		{
+			#>, <#= method.BodyParameter.Name #>);<#
+		} 
+		else 
+		{
+			#>);<# 
+		}#>
+
+		},
 <# } #> 
-};
+    };
 	<# } #>
+
 }(jQuery));
