@@ -115,45 +115,6 @@ namespace <#= Configuration.Namespace#>.Interfaces
 	{
 		HttpClient HttpClient { get; }
 	}
-
-<# foreach(var definition in Configuration.Metadata.Definitions) { #>	
-	public partial interface I<#=definition.Name#><#=Configuration.ClientSuffix#> : IClientBase
-	{
-<# foreach(var method in definition.ActionMethods) { 
-		var allParameters = method.UrlParameters.AsEnumerable().Where(m => m != null);
-		
-		var bodyParameterString = "";
-
-		if (method.BodyParameter != null)
-		{
-			allParameters = allParameters.Concat(new [] { method.BodyParameter });
-			bodyParameterString = ", " + method.BodyParameter.Name;
-		}
-	
-		var parameterList = "";
-
-		if (allParameters.Any())
-		{
-			var q = allParameters.Select(m => m.Type + " " + m.Name);
-			if (q != null)
-				parameterList = string.Join(",", q.ToArray());
-		}
-
-		var concreteReturnType = method.ReturnType.ToConcrete();
-#>
-<# foreach(var p in method.UrlParameters) { #>
-		/// <param name="<#= p.Name #>"><#= p.Description.ToSummary() #></param>
-<# } #>
-<# if (String.IsNullOrEmpty(concreteReturnType)) { #>
-		/// <returns></returns>
-		Task <#= method.Name #>Async(<#= parameterList#>);
-<# } else { #>
-		Task<<#= concreteReturnType #>> <#= method.Name #>Async(<#= parameterList#>);
-<# } #>
-
-<# } #>
-	}
-<# } #>
 }
 
 #endregion
@@ -165,12 +126,12 @@ namespace <#= Configuration.Namespace#>.Clients
 	/// <summary>
 	/// Client base class.
 	/// </summary>
-	public abstract partial class ClientBase : IDisposable
+	public abstract partial class ClientBase : Interfaces.IClientBase, IDisposable
 	{
 		/// <summary>
 		/// Gests the HttpClient.
 		/// </summary>
-		public HttpClient HttpClient { get; protected set; }
+		public HttpClient HttpClient { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClientBase"/> class.
@@ -240,10 +201,7 @@ namespace <#= Configuration.Namespace#>.Clients
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposing && HttpClient != null)
-			{
 				HttpClient.Dispose();
-				HttpClient = null;
-			}
 		}
 		
 		/// <summary>
@@ -326,7 +284,7 @@ namespace <#= Configuration.Namespace#>.Clients
 	/// <summary>
 	/// <#= definition.Description.ToSummary() #>
 	/// </summary>
-	public partial class <#=definition.Name#><#= Configuration.ClientSuffix#> : ClientBase, Interfaces.I<#=definition.Name#><#=Configuration.ClientSuffix#>
+	public partial class <#=definition.Name#><#= Configuration.ClientSuffix#> : ClientBase
 	{
 		#region Constructors
 

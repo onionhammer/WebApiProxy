@@ -85,22 +85,6 @@ namespace WebApiProxy.TestClient.Interfaces
 	{
 		HttpClient HttpClient { get; }
 	}
-
-	
-	public partial interface IValuesClient : IClientBase
-	{
-		Task<List<ItemTestViewModel>> GetAsync();
-
-		/// <param name="id">id of the value</param>
-		Task<ItemTestViewModel> GetAsync(Int32 id);
-
-		/// <param name="name">Name of thing to find</param>
-		Task<ItemTestViewModel> FindByNameAsync(String name);
-
-		/// <returns></returns>
-		Task PostAsync(ItemTestViewModel value);
-
-	}
 }
 
 #endregion
@@ -112,12 +96,12 @@ namespace WebApiProxy.TestClient.Clients
 	/// <summary>
 	/// Client base class.
 	/// </summary>
-	public abstract partial class ClientBase : IDisposable
+	public abstract partial class ClientBase : Interfaces.IClientBase, IDisposable
 	{
 		/// <summary>
 		/// Gests the HttpClient.
 		/// </summary>
-		public HttpClient HttpClient { get; protected set; }
+		public HttpClient HttpClient { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClientBase"/> class.
@@ -187,10 +171,7 @@ namespace WebApiProxy.TestClient.Clients
 		protected virtual void Dispose(bool disposing)
 		{
 			if (disposing && HttpClient != null)
-			{
 				HttpClient.Dispose();
-				HttpClient = null;
-			}
 		}
 		
 		/// <summary>
@@ -262,7 +243,7 @@ namespace WebApiProxy.TestClient.Clients
 	/// <summary>
 	/// 
 	/// </summary>
-	public partial class ValuesClient : ClientBase, Interfaces.IValuesClient
+	public partial class ValuesClient : ClientBase
 	{
 		#region Constructors
 
