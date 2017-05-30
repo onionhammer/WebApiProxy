@@ -128,7 +128,7 @@ namespace <#= Configuration.Namespace#>.Interfaces
 			var q = allParameters.Select(m => m.Type + " " + m.Name);
 			if (q != null)
 				parameterList = string.Join(",", q.ToArray());
-		}		
+		}
 
 		var concreteReturnType = method.ReturnType.ToConcrete();
 #>
@@ -139,7 +139,7 @@ namespace <#= Configuration.Namespace#>.Interfaces
 
 <# if (String.IsNullOrEmpty(concreteReturnType)) { #>
 		/// <returns></returns>
-		Task<HttpResponseMessage> <#= method.Name #>Async(<#= parameterList#>);
+		Task <#= method.Name #>Async(<#= parameterList#>);
 <# } else { #>
 		Task<<#= concreteReturnType #>> <#= method.Name #>Async(<#= parameterList#>);
 <# } #>
@@ -178,12 +178,12 @@ namespace <#= Configuration.Namespace#>.Clients
 		/// <summary>
 		/// Ensures that response has a valid (200 - OK) status code
 		/// </summary>
-		public virtual void EnsureSuccess(HttpResponseMessage response)
+		public virtual async Task EnsureSuccessAsync(HttpResponseMessage response)
 		{			
 			if (response.IsSuccessStatusCode)				
 				return;
 													
-			var content = response.Content.ReadAsStringAsync().Result;
+			var content = await response.Content.ReadAsStringAsync();
 			throw new WebApiProxyResponseException(response.StatusCode, content);			
 		}
 
@@ -213,7 +213,7 @@ namespace <#= Configuration.Namespace#>.Clients
 		/// <summary>
 		/// Encode the input parameter as a string
 		/// </summary>
-		protected string EncodeParam(DateTime value) 
+		protected string EncodeParam(DateTime value)
 		{
 			return System.Net.WebUtility.UrlEncode(value.ToString("s"));
 		}
@@ -340,8 +340,7 @@ namespace <#= Configuration.Namespace#>.Clients
 		
 		var bodyParameterString  = ", default(HttpResponseMessage)";
 		var parameterNameList    = "";
-
-		var concreteReturnType = method.ReturnType.ToConcrete();
+		var concreteReturnType   = method.ReturnType.ToConcrete();
 
 		if (method.BodyParameter != null) {
 			allParameters = allParameters.Concat(new [] { method.BodyParameter });
@@ -372,13 +371,11 @@ namespace <#= Configuration.Namespace#>.Clients
 		/// <param name="<#= p.Name #>"><#= p.Description.ToSummary() #></param>
 		<# } #>
 		/// <returns></returns>
-		public virtual async Task<HttpResponseMessage> <#= method.Name #>Async(<#= parameterList#>)
+		public virtual async Task <#= method.Name #>Async(<#= parameterList#>)
 		{
 			var result = await HttpClient.<#=method.Type.ToTitle()#><#= postOrPutOrPatch ? "AsJson" : "" #>Async<#= postOrPutOrPatch && method.BodyParameter != null ? "<" + method.BodyParameter.Type + ">" : "" #>(<#=url#><#= postOrPutOrPatch ? bodyParameterString:""#>);
 		
-			EnsureSuccess(result);
-
-			return result;
+			await EnsureSuccessAsync(result);
 		}
 
 <# } else { #>
@@ -393,7 +390,7 @@ namespace <#= Configuration.Namespace#>.Clients
 		{
 			var result = await HttpClient.<#=method.Type.ToTitle()#><#= postOrPutOrPatch ? "AsJson" : "" #>Async<#= postOrPutOrPatch && method.BodyParameter != null ? "<" + method.BodyParameter.Type + ">" : "" #>(<#=url#><#= postOrPutOrPatch ? bodyParameterString:""#>);
 			 
-			EnsureSuccess(result);
+			await EnsureSuccessAsync(result);
 				 
 			return await result.Content.ReadAsAsync<<#= concreteReturnType #>>();
 		}
