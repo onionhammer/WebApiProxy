@@ -4,16 +4,16 @@
     <id>WebApiProxy</id>
     <version>$version$</version>
     <title>$title$</title>
-    <authors>Fanie Reynders</authors>
-    <owners>Fanie Reynders</owners>
-    <projectUrl>https://github.com/faniereynders/WebApiProxy</projectUrl>
+    <authors>Erik O'Leary; Fanie Reynders</authors>
+    <owners>Erik O'Leary; Forked from Fanie Reynders</owners>
+    <projectUrl>https://github.com/onionhammer/WebApiProxy</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <releaseNotes />
     <copyright>$copyright$</copyright>
     <tags>AspNet WebAPI Proxy JavaScript CSharp</tags>
     <dependencies>
-      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.2" />
+      <dependency id="Microsoft.AspNet.WebApi.Core" version="5.2.3" />
       <dependency id="DocsByReflection" version="[1.0.12)" />
     </dependencies>
   </metadata>

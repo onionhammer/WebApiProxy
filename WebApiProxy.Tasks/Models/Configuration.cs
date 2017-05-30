@@ -20,7 +20,6 @@ namespace WebApiProxy.Tasks.Models
         private string _name = "MyWebApiProxy";
         private bool _generateOnBuild = false;
         private string _namespace = "WebApi.Proxies";
-        private bool _generateAsyncReturnTypes = false;
 
         [XmlAttribute("generateOnBuild")]
         public bool GenerateOnBuild
@@ -78,20 +77,7 @@ namespace WebApiProxy.Tasks.Models
 
         [XmlAttribute("endpoint")]
         public string Endpoint { get; set; }
-
-        [XmlAttribute("generateAsyncReturnTypes")]
-        public bool GenerateAsyncReturnTypes
-        {
-            get
-            {
-                return _generateAsyncReturnTypes;
-            }
-            set
-            {
-                _generateAsyncReturnTypes = value;
-            }
-        }
-
+        
         //[XmlAttribute("host")]
         //public string Host { get; set; }
 

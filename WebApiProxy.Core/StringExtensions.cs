@@ -17,7 +17,6 @@ namespace WebApiProxy
         public static string ToTitle(this string helper)
         {
             return helper.Substring(0, 1).ToUpper() + helper.Substring(1, helper.Length - 1).ToLower();
-
         }
 
         public static string ToCamelCasing(this string helper)
@@ -32,7 +31,10 @@ namespace WebApiProxy
         /// <returns>The xml documentation format.</returns>
         public static string ToSummary(this string description)
         {
-            return Regex.Replace(description, "\n\\s*", "\n\t\t/// ");
+            return Regex.Replace(description, "\n\\s*", "\n\t\t/// ")
+                        .Replace("&", "&amp;").Replace("<", "&lt;")
+                        .Replace(">", "&gt;").Replace("\"", "&quot;")
+                        .Replace("'", "&apos;");
         }
 
         /// <summary>
@@ -65,8 +67,10 @@ namespace WebApiProxy
             var rePattern = new Regex(@"(\{+)([^\}]+)(\}+)", RegexOptions.Compiled);
 
             if (template == null) throw new ArgumentNullException();
-            Type type = template.GetType();
+
+            var type = template.GetType();
             var cache = new Dictionary<string, string>();
+
             return rePattern.Replace(pattern, match =>
             {
                 int lCount = match.Groups[1].Value.Length,
