@@ -4,140 +4,138 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 
-(function($) {
-	"use strict";
+(function ($) {
+    "use strict";
 
-	if (!$) {
-		throw "jQuery is required";
-	}
+    if (!$) {
+        throw "jQuery is required";
+    }
 
-	$.proxies = $.proxies || { 
-		baseUrl: "<#= this.Metadata.Host #>"
-	};
+    $.proxies = $.proxies || {
+        baseUrl: "<#= this.Metadata.Host #>"
+    };
 
-	function getQueryString(params, queryString) {
-		queryString = queryString || "";
-		for(var prop in params) {
-			if (params.hasOwnProperty(prop)) {
-				var val = getArgValue(params[prop]);
-				if (val === null) continue;
+    function getQueryString(params, queryString) {
+        queryString = queryString || "";
+        for (var prop in params) {
+            if (params.hasOwnProperty(prop)) {
+                var val = getArgValue(params[prop]);
+                if (val === null) continue;
 
-				if ("" + val === "[object Object]") {
-					queryString = getQueryString(params[prop], queryString);
-					continue;
-				}
+                if ("" + val === "[object Object]") {
+                    queryString = getQueryString(params[prop], queryString);
+                    continue;
+                }
 
-				if (queryString.length) {
-					queryString += "&";
-				} else {
-					queryString += "?";
-				}
-				queryString = queryString + prop + "=" +val;
-			}
-		}
-		return queryString;
-	}
+                if (queryString.length) {
+                    queryString += "&";
+                } else {
+                    queryString += "?";
+                }
+                queryString = queryString + prop + "=" + val;
+            }
+        }
+        return queryString;
+    }
 
-	function getArgValue(val) {
-		if (val === undefined || val === null) return null;
-		return val;
-	}
+    function getArgValue(val) {
+        if (val === undefined || val === null) return null;
+        return val;
+    }
 
-	function invoke(url, type, urlParams, body) {
-		//url += getQueryString(urlParams);
+    function invoke(url, type, urlParams, body) {
+        var ajaxOptions = $.extend({}, this.defaultOptions, {
+            url: $.proxies.baseUrl + url,
+            type: type,
+            beforeSend: function (xhr) {
+                if (typeof (webApiAuthToken) != "undefined" && webApiAuthToken.length > 0)
+                    xhr.setRequestHeader("Authorization", "Bearer " + webApiAuthToken);
+            },
+        });
 
-		var ajaxOptions = $.extend({}, this.defaultOptions, {
-			url: $.proxies.baseUrl + url,
-			type: type,
-			beforeSend : function(xhr) {
-				if (typeof(webApiAuthToken) != "undefined" && webApiAuthToken.length > 0)
-					xhr.setRequestHeader("Authorization", "Bearer " + webApiAuthToken);
-			},
-		});
+        if (body) {
+            ajaxOptions.data = body;
+        }
 
-		if (body) {
-			ajaxOptions.data = body;
-		}
+        if (this.antiForgeryToken) {
+            var token = $.isFunction(this.antiForgeryToken) ? this.antiForgeryToken() : this.antiForgeryToken;
+            if (token) {
+                ajaxOptions.headers = ajaxOptions.headers || {};
+            }
+        }
 
-		if (this.antiForgeryToken) {
-			var token = $.isFunction(this.antiForgeryToken) ? this.antiForgeryToken() : this.antiForgeryToken;
-			if (token) {
-				ajaxOptions.headers = ajaxOptions.headers || {};
-			}
-		}
-	
-		return $.ajax(ajaxOptions);
-	}
+        return $.ajax(ajaxOptions);
+    }
 
-	function defaultAntiForgeryTokenAccessor() {
-		return $("input[name=__RequestVerificationToken]").val();
-	}
+    function defaultAntiForgeryTokenAccessor() {
+        return $("input[name=__RequestVerificationToken]").val();
+    }
 
-	function endsWith(str, suffix) {
-		return str.indexOf(suffix, str.length - suffix.length) !== -1;
-	}
+    function endsWith(str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
 
-	function appendPathDelimiter(url){
-		if(!endsWith(url, '/')){
-			return url + '/';
-		}
-		
-		return url;
-	}
+    function appendPathDelimiter(url) {
+        if (!endsWith(url, '/')) {
+            return url + '/';
+        }
 
-	/* Proxies */
+        return url;
+    }
 
-	<# foreach(var definition in this.Metadata.Definitions) { #>
+    /* Proxies */
+
+    <# foreach(var definition in this.Metadata.Definitions) { #>
 $.proxies.<#= definition.Name.ToLower() #> = {
-		defaultOptions: {},
-		antiForgeryToken: defaultAntiForgeryTokenAccessor,
+        defaultOptions: {},
+        antiForgeryToken: defaultAntiForgeryTokenAccessor,
 <# foreach(var method in definition.ActionMethods) { 
-	var allParameters = method.UrlParameters.AsEnumerable();
-	
-	if (method.BodyParameter != null) 
-		allParameters = allParameters.Concat(new [] { method.BodyParameter });
+    var allParameters = method.UrlParameters.AsEnumerable();
 
-	var selectedParameters = allParameters.Where(m => m != null).Select(m => m.Name).ToList();
-	selectedParameters.Add("options");
+    if (method.BodyParameter != null) 
+        allParameters = allParameters.Concat(new [] { method.BodyParameter });
 
-	var parameterList = string.Join(",", selectedParameters);
+    var selectedParameters = allParameters.Where(m => m != null).Select(m => m.Name).ToList();
+    selectedParameters.Add("options");
 
-	var url = ("\"" + method.Url.Replace("{", "\" + ")
-		.Replace("}", " + \"") + "\"")
-		.Replace(" + \"\"","");
+    var parameterList = string.Join(",", selectedParameters);
+
+    var url = ("\"" + method.Url.Replace("{", "\" + ")
+        .Replace("}", " + \"") + "\"")
+        .Replace(" + \"\"","");
 #>
-		<#= method.Name.ToCamelCasing() #>: function(<#=parameterList#>) {
-			var defaults = { fields: [] };
-			var settings = $.extend({}, defaults, options || {});
-			var url	     = <#= url #>;
+        <#= method.Name.ToCamelCasing() #>: function(<#=parameterList#>) {
+            var defaults = { fields: [] };
+            var settings = $.extend({}, defaults, options || {});
+            var url	     = <#= url #>;
 
-			if(settings.fields.length > 0) {
-			    url +=  url.indexOf("?") == -1 ? "?" : "&";
-			    url += "fields=" + settings.fields.join();
-			}
+            if(settings.fields.length > 0) {
+                url +=  url.indexOf("?") == -1 ? "?" : "&";
+                url += "fields=" + settings.fields.join();
+            }
 
-			return invoke.call(this, url, "<#= method.Type.ToString().ToLower() #>",<#
-		if (method.UrlParameters.Any()) 
-		{
-			var parameters = string.Join(", ", method.UrlParameters.Select(parameter => $"{parameter.Name}: {parameter.Name}"));
-			#> { <#=parameters#> }<# 
-		}
-		else 
-		{ 
-			#>{}<#
-		}
-		if (method.BodyParameter != null) 
-		{
-			#>, <#= method.BodyParameter.Name #>);<#
-		} 
-		else 
-		{
-			#>);<# 
-		}#>
+            return invoke.call(this, url, "<#= method.Type.ToString().ToLower() #>",<#
+        if (method.UrlParameters.Any()) 
+        {
+            var parameters = string.Join(", ", method.UrlParameters.Select(parameter => $"{parameter.Name}: {parameter.Name}"));
+            #> { <#=parameters#> }<# 
+        }
+        else 
+        { 
+            #>{}<#
+        }
+        if (method.BodyParameter != null) 
+        {
+            #>, <#= method.BodyParameter.Name #>);<#
+        } 
+        else 
+        {
+            #>);<# 
+        }#>
 
-		},
+        },
 <# } #> 
     };
-	<# } #>
+    <# } #>
 
 }(jQuery));

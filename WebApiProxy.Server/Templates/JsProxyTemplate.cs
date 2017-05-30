@@ -28,178 +28,183 @@ namespace WebApiProxy.Server.Templates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n(function($) {\r\n\t\"use strict\";\r\n\r\n\tif (!$) {\r\n\t\tthrow \"jQuery is required\";\r\n\t}" +
-                    "\r\n\r\n\t$.proxies = $.proxies || { \r\n\t\tbaseUrl: \"");
+            this.Write("\r\n(function ($) {\r\n    \"use strict\";\r\n\r\n    if (!$) {\r\n        throw \"jQuery is r" +
+                    "equired\";\r\n    }\r\n\r\n    $.proxies = $.proxies || {\r\n        baseUrl: \"");
             
             #line 15 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.Metadata.Host));
             
             #line default
             #line hidden
-            this.Write("\"\r\n\t};\r\n\r\n\tfunction getQueryString(params, queryString) {\r\n\t\tqueryString = queryS" +
-                    "tring || \"\";\r\n\t\tfor(var prop in params) {\r\n\t\t\tif (params.hasOwnProperty(prop)) {" +
-                    "\r\n\t\t\t\tvar val = getArgValue(params[prop]);\r\n\t\t\t\tif (val === null) continue;\r\n\r\n\t" +
-                    "\t\t\tif (\"\" + val === \"[object Object]\") {\r\n\t\t\t\t\tqueryString = getQueryString(para" +
-                    "ms[prop], queryString);\r\n\t\t\t\t\tcontinue;\r\n\t\t\t\t}\r\n\r\n\t\t\t\tif (queryString.length) {\r" +
-                    "\n\t\t\t\t\tqueryString += \"&\";\r\n\t\t\t\t} else {\r\n\t\t\t\t\tqueryString += \"?\";\r\n\t\t\t\t}\r\n\t\t\t\tqu" +
-                    "eryString = queryString + prop + \"=\" +val;\r\n\t\t\t}\r\n\t\t}\r\n\t\treturn queryString;\r\n\t}" +
-                    "\r\n\r\n\tfunction getArgValue(val) {\r\n\t\tif (val === undefined || val === null) retur" +
-                    "n null;\r\n\t\treturn val;\r\n\t}\r\n\r\n\tfunction invoke(url, type, urlParams, body) {\r\n\t\t" +
-                    "//url += getQueryString(urlParams);\r\n\r\n\t\tvar ajaxOptions = $.extend({}, this.def" +
-                    "aultOptions, {\r\n\t\t\turl: $.proxies.baseUrl + url,\r\n\t\t\ttype: type,\r\n\t\t\tbeforeSend " +
-                    ": function(xhr) {\r\n\t\t\t\tif (typeof(webApiAuthToken) != \"undefined\" && webApiAuthT" +
-                    "oken.length > 0)\r\n\t\t\t\t\txhr.setRequestHeader(\"Authorization\", \"Bearer \" + webApiA" +
-                    "uthToken);\r\n\t\t\t},\r\n\t\t});\r\n\r\n\t\tif (body) {\r\n\t\t\tajaxOptions.data = body;\r\n\t\t}\r\n\r\n\t" +
-                    "\tif (this.antiForgeryToken) {\r\n\t\t\tvar token = $.isFunction(this.antiForgeryToken" +
-                    ") ? this.antiForgeryToken() : this.antiForgeryToken;\r\n\t\t\tif (token) {\r\n\t\t\t\tajaxO" +
-                    "ptions.headers = ajaxOptions.headers || {};\r\n\t\t\t}\r\n\t\t}\r\n\t\r\n\t\treturn $.ajax(ajaxO" +
-                    "ptions);\r\n\t}\r\n\r\n\tfunction defaultAntiForgeryTokenAccessor() {\r\n\t\treturn $(\"input" +
-                    "[name=__RequestVerificationToken]\").val();\r\n\t}\r\n\r\n\tfunction endsWith(str, suffix" +
-                    ") {\r\n\t\treturn str.indexOf(suffix, str.length - suffix.length) !== -1;\r\n\t}\r\n\r\n\tfu" +
-                    "nction appendPathDelimiter(url){\r\n\t\tif(!endsWith(url, \'/\')){\r\n\t\t\treturn url + \'/" +
-                    "\';\r\n\t\t}\r\n\t\t\r\n\t\treturn url;\r\n\t}\r\n\r\n\t/* Proxies */\r\n\r\n\t");
+            this.Write("\"\r\n    };\r\n\r\n    function getQueryString(params, queryString) {\r\n        queryStr" +
+                    "ing = queryString || \"\";\r\n        for (var prop in params) {\r\n            if (pa" +
+                    "rams.hasOwnProperty(prop)) {\r\n                var val = getArgValue(params[prop]" +
+                    ");\r\n                if (val === null) continue;\r\n\r\n                if (\"\" + val " +
+                    "=== \"[object Object]\") {\r\n                    queryString = getQueryString(param" +
+                    "s[prop], queryString);\r\n                    continue;\r\n                }\r\n\r\n    " +
+                    "            if (queryString.length) {\r\n                    queryString += \"&\";\r\n" +
+                    "                } else {\r\n                    queryString += \"?\";\r\n             " +
+                    "   }\r\n                queryString = queryString + prop + \"=\" + val;\r\n           " +
+                    " }\r\n        }\r\n        return queryString;\r\n    }\r\n\r\n    function getArgValue(va" +
+                    "l) {\r\n        if (val === undefined || val === null) return null;\r\n        retur" +
+                    "n val;\r\n    }\r\n\r\n    function invoke(url, type, urlParams, body) {\r\n        var " +
+                    "ajaxOptions = $.extend({}, this.defaultOptions, {\r\n            url: $.proxies.ba" +
+                    "seUrl + url,\r\n            type: type,\r\n            beforeSend: function (xhr) {\r" +
+                    "\n                if (typeof (webApiAuthToken) != \"undefined\" && webApiAuthToken." +
+                    "length > 0)\r\n                    xhr.setRequestHeader(\"Authorization\", \"Bearer \"" +
+                    " + webApiAuthToken);\r\n            },\r\n        });\r\n\r\n        if (body) {\r\n      " +
+                    "      ajaxOptions.data = body;\r\n        }\r\n\r\n        if (this.antiForgeryToken) " +
+                    "{\r\n            var token = $.isFunction(this.antiForgeryToken) ? this.antiForger" +
+                    "yToken() : this.antiForgeryToken;\r\n            if (token) {\r\n                aja" +
+                    "xOptions.headers = ajaxOptions.headers || {};\r\n            }\r\n        }\r\n\r\n     " +
+                    "   return $.ajax(ajaxOptions);\r\n    }\r\n\r\n    function defaultAntiForgeryTokenAcc" +
+                    "essor() {\r\n        return $(\"input[name=__RequestVerificationToken]\").val();\r\n  " +
+                    "  }\r\n\r\n    function endsWith(str, suffix) {\r\n        return str.indexOf(suffix, " +
+                    "str.length - suffix.length) !== -1;\r\n    }\r\n\r\n    function appendPathDelimiter(u" +
+                    "rl) {\r\n        if (!endsWith(url, \'/\')) {\r\n            return url + \'/\';\r\n      " +
+                    "  }\r\n\r\n        return url;\r\n    }\r\n\r\n    /* Proxies */\r\n\r\n    ");
             
-            #line 90 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 88 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  foreach(var definition in this.Metadata.Definitions) { 
             
             #line default
             #line hidden
             this.Write("$.proxies.");
             
-            #line 91 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 89 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(definition.Name.ToLower()));
             
             #line default
             #line hidden
-            this.Write(" = {\r\n\t\tdefaultOptions: {},\r\n\t\tantiForgeryToken: defaultAntiForgeryTokenAccessor," +
-                    "\r\n");
+            this.Write(" = {\r\n        defaultOptions: {},\r\n        antiForgeryToken: defaultAntiForgeryTo" +
+                    "kenAccessor,\r\n");
             
-            #line 94 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 92 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  foreach(var method in definition.ActionMethods) { 
-	var allParameters = method.UrlParameters.AsEnumerable();
-	
-	if (method.BodyParameter != null) 
-		allParameters = allParameters.Concat(new [] { method.BodyParameter });
+    var allParameters = method.UrlParameters.AsEnumerable();
 
-	var selectedParameters = allParameters.Where(m => m != null).Select(m => m.Name).ToList();
-	selectedParameters.Add("options");
+    if (method.BodyParameter != null) 
+        allParameters = allParameters.Concat(new [] { method.BodyParameter });
 
-	var parameterList = string.Join(",", selectedParameters);
+    var selectedParameters = allParameters.Where(m => m != null).Select(m => m.Name).ToList();
+    selectedParameters.Add("options");
 
-	var url = ("\"" + method.Url.Replace("{", "\" + ")
-		.Replace("}", " + \"") + "\"")
-		.Replace(" + \"\"","");
+    var parameterList = string.Join(",", selectedParameters);
+
+    var url = ("\"" + method.Url.Replace("{", "\" + ")
+        .Replace("}", " + \"") + "\"")
+        .Replace(" + \"\"","");
 
             
             #line default
             #line hidden
-            this.Write("\t\t");
+            this.Write("        ");
             
-            #line 109 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 107 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Name.ToCamelCasing()));
             
             #line default
             #line hidden
             this.Write(": function(");
             
-            #line 109 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 107 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parameterList));
             
             #line default
             #line hidden
-            this.Write(") {\r\n\t\t\tvar defaults = { fields: [] };\r\n\t\t\tvar settings = $.extend({}, defaults, " +
-                    "options || {});\r\n\t\t\tvar url\t     = ");
+            this.Write(") {\r\n            var defaults = { fields: [] };\r\n            var settings = $.ext" +
+                    "end({}, defaults, options || {});\r\n            var url\t     = ");
             
-            #line 112 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 110 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(url));
             
             #line default
             #line hidden
-            this.Write(";\r\n\r\n\t\t\tif(settings.fields.length > 0) {\r\n\t\t\t    url +=  url.indexOf(\"?\") == -1 ?" +
-                    " \"?\" : \"&\";\r\n\t\t\t    url += \"fields=\" + settings.fields.join();\r\n\t\t\t}\r\n\r\n\t\t\tretur" +
-                    "n invoke.call(this, url, \"");
+            this.Write(";\r\n\r\n            if(settings.fields.length > 0) {\r\n                url +=  url.in" +
+                    "dexOf(\"?\") == -1 ? \"?\" : \"&\";\r\n                url += \"fields=\" + settings.field" +
+                    "s.join();\r\n            }\r\n\r\n            return invoke.call(this, url, \"");
             
-            #line 119 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 117 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.Type.ToString().ToLower()));
             
             #line default
             #line hidden
             this.Write("\",");
             
-            #line 119 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 117 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
 
-		if (method.UrlParameters.Any()) 
-		{
-			var parameters = string.Join(", ", method.UrlParameters.Select(parameter => $"{parameter.Name}: {parameter.Name}"));
-			
+        if (method.UrlParameters.Any()) 
+        {
+            var parameters = string.Join(", ", method.UrlParameters.Select(parameter => $"{parameter.Name}: {parameter.Name}"));
+            
             
             #line default
             #line hidden
             this.Write(" { ");
             
-            #line 123 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 121 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(parameters));
             
             #line default
             #line hidden
             this.Write(" }");
             
-            #line 123 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 121 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  
-		}
-		else 
-		{ 
-			
+        }
+        else 
+        { 
+            
             
             #line default
             #line hidden
             this.Write("{}");
             
-            #line 127 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 125 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
 
-		}
-		if (method.BodyParameter != null) 
-		{
-			
+        }
+        if (method.BodyParameter != null) 
+        {
+            
             
             #line default
             #line hidden
             this.Write(", ");
             
-            #line 131 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 129 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(method.BodyParameter.Name));
             
             #line default
             #line hidden
             this.Write(");");
             
-            #line 131 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 129 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
 
-		} 
-		else 
-		{
-			
+        } 
+        else 
+        {
+            
             
             #line default
             #line hidden
             this.Write(");");
             
-            #line 135 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 133 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  
-		}
+        }
             
             #line default
             #line hidden
-            this.Write("\r\n\t\t},\r\n");
+            this.Write("\r\n        },\r\n");
             
-            #line 139 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 137 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  } 
             
             #line default
             #line hidden
-            this.Write(" \r\n    };\r\n\t");
+            this.Write(" \r\n    };\r\n    ");
             
-            #line 141 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
+            #line 139 "D:\Development\WebApiProxy\WebApiProxy.Server\Templates\JsProxyTemplate.tt"
  } 
             
             #line default
