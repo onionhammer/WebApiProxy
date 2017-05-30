@@ -9,6 +9,5 @@ namespace WebApiProxy.Core.Models
         public IEnumerable<ControllerDefinition> Definitions { get; set; }
 
         public IEnumerable<ModelDefinition> Models { get; set; }
-
     }
 }

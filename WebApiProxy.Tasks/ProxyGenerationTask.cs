@@ -32,15 +32,15 @@ namespace WebApiProxy.Tasks
                 if (config.GenerateOnBuild)
                 {
                     var generator = new CSharpGenerator(config);
-                    var source = generator.Generate();
+                    var source    = generator.Generate();
+
                     File.WriteAllText(Filename, source);
                     File.WriteAllText(Configuration.CacheFile, source);
-                    
                 }
             }
             catch (ConnectionException)
             {
-                tryReadFromCache();
+                TryReadFromCache();
             }
             catch (Exception ex)
             {
@@ -50,12 +50,11 @@ namespace WebApiProxy.Tasks
             return true;
         }
 
-        private void tryReadFromCache()
+        private void TryReadFromCache()
         {
             if (!File.Exists(Configuration.CacheFile))
-            {
                 throw new ConnectionException(config.Endpoint);
-            }
+
             var source = File.ReadAllText(Configuration.CacheFile);
             File.WriteAllText(Filename, source);
         }

@@ -5,9 +5,7 @@ namespace WebApiProxy.Server
 {
     public static class HttpActionDescriptorExtensions
     {
-        public static bool IsExcluded(this HttpActionDescriptor descriptor)
-        {
-            return descriptor.GetCustomAttributes<ExcludeProxy>(true).Any();
-        }
+        public static bool IsExcluded(this HttpActionDescriptor self) =>
+            self.GetCustomAttributes<ExcludeProxy>(true).Any();
     }
 }

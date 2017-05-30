@@ -5,9 +5,7 @@ namespace WebApiProxy
 {
     public static class TypeExtensions
     {
-        public static bool IsExcluded(this Type type)
-        {
-            return type.GetCustomAttributes(true).OfType<ExcludeProxy>().Any();
-        }
+        public static bool IsExcluded(this Type self) =>
+            self.GetCustomAttributes(true).OfType<ExcludeProxy>().Any();
     }
 }

@@ -5,13 +5,14 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WebApiProxy.Server.Templates;
-//testing ci 1
+
 namespace WebApiProxy.Server
 {
     public class ProxyHandler : DelegatingHandler
     {
-        private MetadataProvider _metadataProvider;
+        MetadataProvider _metadataProvider;
         HttpConfiguration _config;
+
         public ProxyHandler(HttpConfiguration config)
         {
             _metadataProvider = new MetadataProvider(config);

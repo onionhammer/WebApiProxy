@@ -9,6 +9,5 @@ namespace WebApiProxy.Core.Models
         public string Description { get; set; }
 
         public IEnumerable<ActionMethodDefinition> ActionMethods { get; set; }
- 
     }
 }
