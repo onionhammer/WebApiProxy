@@ -18,7 +18,7 @@ namespace WebApiProxy.TestServer.Controllers
             yield return new ItemTestViewModel { Name = "Three", Value = 3 };
         }
 
-        // GET api/values/5
+        // GET api/values/3
         public ItemTestViewModel Get(int id)
         {
             return Get().FirstOrDefault(i => i.Value == id);
