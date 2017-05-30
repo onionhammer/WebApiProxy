@@ -6,6 +6,9 @@ using WebApiProxy.TestServer.Models;
 
 namespace WebApiProxy.TestServer.Controllers
 {
+    /// <summary>
+    /// Values service
+    /// </summary>
     public class ValuesController : ApiController
     {
         /// <summary>

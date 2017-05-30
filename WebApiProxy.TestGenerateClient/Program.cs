@@ -1,17 +1,14 @@
 ﻿using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebApiProxy.Tasks.Infrastructure;
 
-namespace WebApiProxy.TestClient
+namespace WebApiProxy.TestGenerateClient
 {
-    [TestClass]
-    public class CodeGenerationTests
+    public class Program
     {
-        [TestMethod]
-        public void GenerateCode()
+        static void GenerateCode()
         {
-            var projectsPath = Path.Combine(Environment.CurrentDirectory, @"..\..\");
+            var projectsPath = Path.Combine(Environment.CurrentDirectory, @"..\..\..\WebApiProxy.TestClient");
             var root         = Path.Combine(projectsPath, "WebApiProxy");
 
             var config = Tasks.Models.Configuration.Load(root);
@@ -22,7 +19,13 @@ namespace WebApiProxy.TestClient
             File.WriteAllText(
                 Path.Combine(root, "WebApiProxy.generated.cs"),
                 source);
-            
+        }
+
+        public static void Main(string[] args)
+        {
+            Console.Write("Regenerating WebApiProxy.generated.cs for TestClient... ");
+            GenerateCode();
+            Console.WriteLine("Done.");
         }
     }
 }

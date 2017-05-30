@@ -27,7 +27,7 @@ namespace WebApiProxy.TestClient
 		/// <summary>
 		/// Web Api Base Address.
 		/// </summary>
-		public static string ApiProxyBaseAddress = "http://localhost:61048/";
+		public static string APIRoot = "http://localhost:61048/";
 	}
 }
 
@@ -87,7 +87,7 @@ namespace WebApiProxy.TestClient.Clients
 	public abstract partial class ClientBase : IDisposable
 	{
 		/// <summary>
-		/// Gests the HttpClient.
+		/// Gets the HttpClient.
 		/// </summary>
 		public HttpClient HttpClient { get; }
 
@@ -98,7 +98,7 @@ namespace WebApiProxy.TestClient.Clients
 		{
 			HttpClient = new HttpClient()
 			{
-				BaseAddress = new Uri(Configuration.ApiProxyBaseAddress)
+				BaseAddress = new Uri(Configuration.APIRoot)
 			};
 		}
 		
@@ -123,7 +123,7 @@ namespace WebApiProxy.TestClient.Clients
 		{
 			HttpClient = new HttpClient(handler, disposeHandler)
 			{
-				BaseAddress = new Uri(Configuration.ApiProxyBaseAddress)
+				BaseAddress = new Uri(Configuration.APIRoot)
 			};
 		}
 
@@ -195,10 +195,10 @@ namespace WebApiProxy.TestClient.Clients
 			}
 		}
 
-		public WebApiClients(Uri baseAddress = null)
+		public WebApiClients(Uri apiRoot = null)
 		{
-			if (baseAddress != null)
-				Configuration.ApiProxyBaseAddress = baseAddress.AbsoluteUri;
+			if (apiRoot != null)
+				Configuration.APIRoot = apiRoot.AbsoluteUri;
 
 			Values = new ValuesClient();
 		}
@@ -229,21 +229,21 @@ namespace WebApiProxy.TestClient.Clients
 	}
 
 	/// <summary>
-	/// 
+	/// Values service
 	/// </summary>
 	public partial class ValuesClient : ClientBase
 	{
 		#region Constructors
 
 		/// <summary>
-		/// 
+		/// Values service
 		/// </summary>
 		public ValuesClient() : base()
 		{
 		}
 
 		/// <summary>
-		/// 
+		/// Values service
 		/// </summary>
 		public ValuesClient(HttpMessageHandler handler, bool disposeHandler = true) : base(handler, disposeHandler)
 		{
