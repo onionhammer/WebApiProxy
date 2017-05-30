@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace WebApiProxy
@@ -14,8 +13,12 @@ namespace WebApiProxy
             return self;
         }
 
+        public static string StripAsync(this string self) =>
+            Regex.Replace(self, "Async$", "");
+
         public static string ToTitle(this string self) =>
-            self.Substring(0, 1).ToUpper() + self.Substring(1, self.Length - 1).ToLower();
+            self.Substring(0, 1).ToUpper() + 
+            self.Substring(1, self.Length - 1).ToLower();
 
         public static string ToCamelCasing(this string self) =>
             self.Replace(self[0].ToString(), self[0].ToString().ToLower());

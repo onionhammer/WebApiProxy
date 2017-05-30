@@ -36,7 +36,7 @@ namespace WebApiProxy.Tasks.Models
 
         public static Configuration Load(string root)
         {
-            var fileName = root + Configuration.ConfigFileName;
+            var fileName = Path.Combine(root, Configuration.ConfigFileName);
 
             if (!File.Exists(fileName))
                 throw new ConfigFileNotFoundException(fileName);
