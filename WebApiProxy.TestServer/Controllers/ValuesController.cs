@@ -4,35 +4,28 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApiProxy.TestServer.Models;
 
 namespace WebApiProxy.TestServer.Controllers
 {
     public class ValuesController : ApiController
     {
         // GET api/values
-        public IEnumerable<string> Get()
+        public IEnumerable<ItemTestViewModel> Get()
         {
-            return new string[] { "value1", "value2" };
+            yield return new ItemTestViewModel { Name = "One", Value = 1 };
+            yield return new ItemTestViewModel { Name = "Two", Value = 2 };
+            yield return new ItemTestViewModel { Name = "Three", Value = 3 };
         }
 
         // GET api/values/5
-        public string Get(int id)
+        public ItemTestViewModel Get(int id)
         {
-            return "value";
+            return Get().FirstOrDefault(i => i.Value == id);
         }
 
         // POST api/values
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        public void Delete(int id)
+        public void Post([FromBody]ItemTestViewModel value)
         {
         }
     }
