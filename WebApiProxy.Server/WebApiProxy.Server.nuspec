@@ -8,7 +8,7 @@
     <owners>Erik O'Leary; Forked from Fanie Reynders</owners>
     <projectUrl>https://github.com/onionhammer/WebApiProxy</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
+    <description>Provides an endpoint for ASP.NET Web Api services to serve a JavaScript proxy and metadata</description>
     <releaseNotes />
     <copyright>$copyright$</copyright>
     <tags>AspNet WebAPI Proxy JavaScript CSharp</tags>
