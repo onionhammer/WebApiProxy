@@ -17,6 +17,7 @@ namespace WebApiProxy.TestClient
             var all     = await clients.Values.GetAsync();
             var first   = await clients.Values.GetAsync(all[0].Value);
             Assert.IsNotNull(first);
+            Assert.AreEqual(1, first.Value);
 
             var fourth  = await clients.Values.GetAsync(4);
             Assert.IsNull(fourth);
