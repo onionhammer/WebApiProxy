@@ -57,18 +57,18 @@ namespace WebApiProxy.Server
                                                                        where b.Source == ApiParameterSource.FromBody
                                                                        select new ParameterDefinition
                                                                        {
-                                                                           Name = b.ParameterDescriptor.ParameterName,
-                                                                           Type = ParseType(b.ParameterDescriptor.ParameterType),
+                                                                           Name        = b.ParameterDescriptor.ParameterName,
+                                                                           Type        = ParseType(b.ParameterDescriptor.ParameterType),
                                                                            Description = b.Documentation ?? ""
                                                                        }).FirstOrDefault(),
                                                       UrlParameters = from b in a.ParameterDescriptions.Where(p => p.ParameterDescriptor != null)
                                                                       where b.Source == ApiParameterSource.FromUri
                                                                       select new ParameterDefinition
                                                                       {
-                                                                          Name = b.ParameterDescriptor.ParameterName,
-                                                                          Type = ParseType(b.ParameterDescriptor.ParameterType),
-                                                                          Description = b.Documentation ?? "",
-                                                                          IsOptional = b.ParameterDescriptor.IsOptional,
+                                                                          Name         = b.ParameterDescriptor.ParameterName,
+                                                                          Type         = ParseType(b.ParameterDescriptor.ParameterType),
+                                                                          Description  = b.Documentation ?? "",
+                                                                          IsOptional   = b.ParameterDescriptor.IsOptional,
                                                                           DefaultValue = b.ParameterDescriptor.DefaultValue
                                                                       },
                                                       Url         = a.RelativePath,

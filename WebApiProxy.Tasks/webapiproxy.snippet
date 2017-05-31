@@ -49,7 +49,7 @@
             {
                 var response = await client.$method$Async($parameters$);
                 response.EnsureSuccessStatusCode();
-                $useContent$var content = await response.ReadContentAsAsync<$returnType$>();
+                $useContent$var content = await response.ReadAsAsync<$returnType$>();
             }
 	    ]]>
       </Code>

@@ -15,24 +15,6 @@ using System.Threading.Tasks;
 using System.Net;
 using WebApiProxy.TestClient.Models;
 
-#region Proxies
-
-namespace WebApiProxy.TestClient
-{
-	/// <summary>
-	/// Client configuration.
-	/// </summary>
-	public static partial class Configuration
-	{
-		/// <summary>
-		/// Web Api Base Address.
-		/// </summary>
-		public static string APIRoot = "http://localhost:61048/";
-	}
-}
-
-#endregion
-
 #region Models
 
 namespace WebApiProxy.TestClient.Models
@@ -40,10 +22,11 @@ namespace WebApiProxy.TestClient.Models
 	public class WebApiProxyResponseException : Exception
 	{
 		public HttpStatusCode StatusCode { get; }
+
 		public string Content { get; }
 
-		public WebApiProxyResponseException(HttpStatusCode statusCode, string content) 
-			: base("A " + statusCode + " (" + (int)statusCode + ") http exception occured. See Content for response body.")
+		public WebApiProxyResponseException(HttpStatusCode statusCode, string content)
+			: base($"A {statusCode} ({(int)statusCode} http exception occurred. See content for response body.")
 		{
 			StatusCode = statusCode;
 			Content    = content;
@@ -94,11 +77,24 @@ namespace WebApiProxy.TestClient.Clients
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ClientBase"/> class.
 		/// </summary>
-		protected ClientBase()
+		protected ClientBase(string apiRoot)
 		{
 			HttpClient = new HttpClient()
 			{
-				BaseAddress = new Uri(Configuration.APIRoot)
+				BaseAddress = new Uri(apiRoot)
+			};
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ClientBase"/> class.
+		/// </summary>
+		/// <param name="handler">The handler.</param>
+		/// <param name="disposeHandler">if set to <c>true</c> [dispose handler].</param>
+		protected ClientBase(HttpMessageHandler handler, bool disposeHandler = true, string apiRoot = null)
+		{
+			HttpClient = new HttpClient(handler, disposeHandler)
+			{
+				BaseAddress = new Uri(apiRoot)
 			};
 		}
 		
@@ -115,43 +111,24 @@ namespace WebApiProxy.TestClient.Clients
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ClientBase"/> class.
-		/// </summary>
-		/// <param name="handler">The handler.</param>
-		/// <param name="disposeHandler">if set to <c>true</c> [dispose handler].</param>
-		protected ClientBase(HttpMessageHandler handler, bool disposeHandler = true)
-		{
-			HttpClient = new HttpClient(handler, disposeHandler)
-			{
-				BaseAddress = new Uri(Configuration.APIRoot)
-			};
-		}
-
-		/// <summary>
 		/// Encode the input parameter as a string
 		/// </summary>
-		protected string EncodeParam<T>(T value) 
-		{
-			return value == null
+		protected string EncodeParam<T>(T value) =>
+			value == null
 				 ? string.Empty
 				 : System.Net.WebUtility.UrlEncode(value.ToString());
-		}
 		
 		/// <summary>
 		/// Encode the input parameter as a string
 		/// </summary>
-		protected string EncodeParam(DateTime value)
-		{
-			return System.Net.WebUtility.UrlEncode(value.ToString("s"));
-		}
+		protected string EncodeParam(DateTime value) =>
+			System.Net.WebUtility.UrlEncode(value.ToString("s"));
 		
 		/// <summary>
 		/// Encode the input parameter as a string
 		/// </summary>
-		protected string EncodeParam(DateTimeOffset value)
-		{
-			return System.Net.WebUtility.UrlEncode(value.ToString("s"));
-		}
+		protected string EncodeParam(DateTimeOffset value) =>
+			System.Net.WebUtility.UrlEncode(value.ToString("s"));
 		
 		/// <summary>
 		/// Releases the unmanaged resources and disposes of the managed resources.       
@@ -195,12 +172,12 @@ namespace WebApiProxy.TestClient.Clients
 			}
 		}
 
-		public WebApiClients(Uri apiRoot = null)
+		public WebApiClients(Uri apiRootUri = null)
 		{
-			if (apiRoot != null)
-				Configuration.APIRoot = apiRoot.AbsoluteUri;
+			var apiRoot = apiRootUri?.AbsoluteUri
+					   ?? "http://localhost:61048/";
 
-			Values = new ValuesClient();
+			Values = new ValuesClient(apiRoot);
 		}
 
 		public void SetAuthentication(AuthenticationHeaderValue auth)
@@ -238,14 +215,16 @@ namespace WebApiProxy.TestClient.Clients
 		/// <summary>
 		/// Values service
 		/// </summary>
-		public ValuesClient() : base()
+		public ValuesClient(string apiRoot = "http://localhost:61048/") 
+			: base(apiRoot)
 		{
 		}
 
 		/// <summary>
 		/// Values service
 		/// </summary>
-		public ValuesClient(HttpMessageHandler handler, bool disposeHandler = true) : base(handler, disposeHandler)
+		public ValuesClient(HttpMessageHandler handler, bool disposeHandler = true, string apiRoot = "http://localhost:61048/")
+			: base(handler, disposeHandler, apiRoot)
 		{
 		}
 
@@ -259,7 +238,7 @@ namespace WebApiProxy.TestClient.Clients
 		/// <returns></returns>
 		public virtual async Task<List<ItemTestViewModel>> GetAsync()
 		{
-			var result = await HttpClient.GetAsync("api/Values");
+			var result = await HttpClient.GetAsync($"api/Values");
 			 
 			await EnsureSuccessAsync(result);
 				 
@@ -273,7 +252,7 @@ namespace WebApiProxy.TestClient.Clients
 		/// <returns></returns>
 		public virtual async Task<ItemTestViewModel> GetAsync(Int32 id)
 		{
-			var result = await HttpClient.GetAsync("api/Values/" + id);
+			var result = await HttpClient.GetAsync($"api/Values/{EncodeParam(id)}");
 			 
 			await EnsureSuccessAsync(result);
 				 
@@ -287,7 +266,7 @@ namespace WebApiProxy.TestClient.Clients
 		/// <returns></returns>
 		public virtual async Task<ItemTestViewModel> FindByNameAsync(String name)
 		{
-			var result = await HttpClient.GetAsync("api/Values?name=" + name);
+			var result = await HttpClient.GetAsync($"api/Values?name={EncodeParam(name)}");
 			 
 			await EnsureSuccessAsync(result);
 				 
@@ -300,7 +279,7 @@ namespace WebApiProxy.TestClient.Clients
 		/// <returns></returns>
 		public virtual async Task PostAsync(ItemTestViewModel value)
 		{
-			var result = await HttpClient.PostAsJsonAsync<ItemTestViewModel>("api/Values", value);
+			var result = await HttpClient.PostAsJsonAsync<ItemTestViewModel>($"api/Values", value);
 		
 			await EnsureSuccessAsync(result);
 		}
