@@ -1,19 +1,34 @@
 ﻿function WebApiProxy-Generate-CSharp() {
-    $nugetPath = Join-Path $PSScriptRoot "..\"
+    $nugetPath   = Join-Path $PSScriptRoot "..\"
     $projectPath = [System.IO.Path]::GetDirectoryName((Get-Project).FullName)
 
     $generateJob = Start-Job -ScriptBlock { 
         param($projectPath, $nugetPath)
 
-        $buildPath = Join-Path $nugetPath "build\WebApiProxy.Tasks.dll"
-        $configPath = Join-Path $projectPath "WebApiProxy\"
+		$jsonPath      = Join-Path $nugetPath "build\Newtonsoft.Json.dll"
+        $tasksPath     = Join-Path $nugetPath "build\WebApiProxy.Tasks.dll"
+        $configPath    = Join-Path $projectPath "WebApiProxy\"
         $generatedPath = Join-Path $projectPath "WebApiProxy\WebApiProxy.generated.cs"
 
         # Attempt to set file not readonly
         sp $generatedPath IsReadOnly $false -ErrorAction SilentlyContinue
     
         # Load Tasks
-        Add-Type -Path $buildPath
+		$newtonsoftJson = [System.Reflection.Assembly]::LoadFile($jsonPath)
+        Add-Type -Path $tasksPath
+		
+		# Set up DLL path resolver
+		[System.AppDomain]::CurrentDomain.add_AssemblyResolve([System.ResolveEventHandler] {
+			param($sender, $e)
+
+			if ($e.Name -like "Newtonsoft.Json*") { return $newtonsoftJson }
+
+			foreach($a in [System.AppDomain]::CurrentDomain.GetAssemblies()) {
+				if ($a.FullName -eq $e.Name) { return $a }
+			}
+
+			return $null
+		})
 
         # Load configuration
         $config    = [WebApiProxy.Tasks.Models.Configuration]::Load($configPath);
@@ -32,7 +47,9 @@
     } -ArgumentList @($projectPath, $nugetPath)
 	 
     Try {
-        Write-Host ( Receive-Job -Job $generateJob -Wait )
+		$output = Receive-Job -Job $generateJob -Wait -ErrorAction Stop
+
+        Write-Host $output
         Write-Host "Done." -ForegroundColor Green
     }
     Catch {
