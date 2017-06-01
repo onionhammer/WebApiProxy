@@ -17,17 +17,12 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\$configuration$\Newtonsoft.Json.dll" target="lib\net46" />
-    <file src="bin\$configuration$\System.Net.Http.Formatting.dll" target="lib\net46" />
     <file src="bin\$configuration$\*.dll" target="build" />
     <file src="bin\$configuration$\*.targets" target="build" />
     
     <file src="bin\$configuration$\WebApiProxy.config" target="content\WebApiProxy" />
     <file src="bin\$configuration$\WebApiProxy.generated.cs" target="content\WebApiProxy" />
-    <file src="bin\$configuration$\webapiproxy.snippet" target="tools" />
     <file src="bin\$configuration$\init.ps1" target="tools" />
-    <file src="bin\$configuration$\install.ps1" target="tools" />
-    <file src="bin\$configuration$\uninstall.ps1" target="tools" />
     <file src="bin\$configuration$\WebApiProxyCSharp.psm1" target="tools" />
   </files>
 </package>
