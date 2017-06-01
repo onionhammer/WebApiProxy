@@ -1,34 +1,43 @@
 ﻿function WebApiProxy-Generate-CSharp() {
+    $nugetPath = Join-Path $PSScriptRoot "..\"
+    $projectPath = [System.IO.Path]::GetDirectoryName((Get-Project).FullName)
 
-	$project     = Get-Project
-    $projectPath = [System.IO.Path]::GetDirectoryName($project.FullName)
-	$root        = (Join-Path $projectPath "WebApiProxy\")
-	$rootSpaces  = "$root"
+    $generateJob = Start-Job -ScriptBlock { 
+        param($projectPath, $nugetPath)
 
-	$generateJob = Start-Job -ScriptBlock { 
-        param($project,$projectPath,$rootSpaces) 
+        $buildPath = Join-Path $nugetPath "build\WebApiProxy.Tasks.dll"
+        $configPath = Join-Path $projectPath "WebApiProxy\"
+        $generatedPath = Join-Path $projectPath "WebApiProxy\WebApiProxy.generated.cs"
 
-		Add-Type -Path (Join-Path $projectPath "bin\Debug\WebApiProxy.Tasks.dll")
-
-		$config = [WebApiProxy.Tasks.Models.Configuration]::Load($rootSpaces);
-
-		$generator = New-Object WebApiProxy.Tasks.Infrastructure.CSharpGenerator -ArgumentList @($config)
-		$fileName = (Join-Path $projectPath "WebApiProxy\WebApiProxy.generated.cs")
+        # Attempt to set file not readonly
+        sp $generatedPath IsReadOnly $false -ErrorAction SilentlyContinue
     
-		Write-Host "Generating proxy code..."
+        # Load Tasks
+        Add-Type -Path $buildPath
 
-		$source = $generator.Generate()
+        # Load configuration
+        $config    = [WebApiProxy.Tasks.Models.Configuration]::Load($configPath);
+        $generator = New-Object WebApiProxy.Tasks.Infrastructure.CSharpGenerator -ArgumentList @($config)
+	
+        # Generate code
+        Write-Host "Generating WebApiProxy code..."
+	
+        $source = $generator.Generate()
+
+        # Copy content into file
+        $discard = New-Item $generatedPath `
+            -ItemType "file" -Force `
+            -Value $source
     
-		$result = New-Item $fileName `
-			  -ItemType "file" -Force `
-			  -Value $source
-    
-		# $item = $project.ProjectItems.AddFromFile($fileName)
-	 } -ArgumentList @($project,$projectPath,$rootSpaces)
+    } -ArgumentList @($projectPath, $nugetPath)
 	 
-	 $result = Receive-Job -Job $generateJob -Wait
-	 Write-Host $result
-     Write-Host "Done."
+    Try {
+        Write-Host ( Receive-Job -Job $generateJob -Wait )
+        Write-Host "Done." -ForegroundColor Green
+    }
+    Catch {
+        Write-Host $_.Exception.Message -ForegroundColor Red
+    }
 } 
 
 Export-ModuleMember "WebApiProxy-Generate-CSharp"
