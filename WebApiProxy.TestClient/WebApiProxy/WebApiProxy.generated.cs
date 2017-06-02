@@ -31,8 +31,8 @@ namespace WebApiProxy.TestClient.Models
 			StatusCode = statusCode;
 			Content    = content;
 		}
-	}
-		
+	} 	
+
 	/// <summary>
 	/// 
 	/// </summary>
