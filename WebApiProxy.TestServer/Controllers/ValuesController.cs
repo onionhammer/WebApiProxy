@@ -16,16 +16,16 @@ namespace WebApiProxy.TestServer.Controllers
         /// </summary>
         public IEnumerable<ItemTestViewModel> Get()
         {
-            yield return new ItemTestViewModel { Name = "One", Value = 1 };
-            yield return new ItemTestViewModel { Name = "Two", Value = 2 };
-            yield return new ItemTestViewModel { Name = "Three", Value = 3 };
+            yield return new ItemTestViewModel { Name = "One", Value = ItemTestEnum.One };
+            yield return new ItemTestViewModel { Name = "Two", Value = ItemTestEnum.Two };
+            yield return new ItemTestViewModel { Name = "Three", Value = ItemTestEnum.Three };
         }
 
         /// <summary>
         /// Get specific <value>Value</value>
         /// </summary>
         /// <param name="id">id of the value</param>
-        public ItemTestViewModel Get(int id)
+        public ItemTestViewModel Get(ItemTestEnum id)
         {
             return Get().FirstOrDefault(i => i.Value == id);
         }

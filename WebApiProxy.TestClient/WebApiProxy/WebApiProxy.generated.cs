@@ -52,9 +52,42 @@ namespace WebApiProxy.TestClient.Models
 		/// <summary>
 		/// 
 		/// </summary>
-		public virtual Int32 Value { get; set; }
+		public virtual ItemTestEnum Value { get; set; }
 
 		#endregion
+	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum ItemTestEnum
+	{
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		Zero = 0,
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		One = 1,
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		Two = 2,
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		Three = 3,
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		Four = 4,
+		
 	}
 }
 
@@ -250,7 +283,7 @@ namespace WebApiProxy.TestClient.Clients
 		/// </summary>
 		/// <param name="id">id of the value</param>
 		/// <returns></returns>
-		public virtual async Task<ItemTestViewModel> GetAsync(Int32 id)
+		public virtual async Task<ItemTestViewModel> GetAsync(ItemTestEnum id)
 		{
 			var result = await HttpClient.GetAsync($"api/Values/{EncodeParam(id)}");
 			 

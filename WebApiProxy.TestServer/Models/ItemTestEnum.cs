@@ -5,9 +5,12 @@ using System.Web;
 
 namespace WebApiProxy.TestServer.Models
 {
-    public class ItemTestViewModel
+    public enum ItemTestEnum
     {
-        public string Name { get; set; }
-        public ItemTestEnum Value { get; set; }
+        Zero  = 0,
+        One   = 1,
+        Two   = 2,
+        Three = 3,
+        Four  = 4,
     }
 }
