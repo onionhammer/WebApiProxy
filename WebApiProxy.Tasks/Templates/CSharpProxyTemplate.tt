@@ -200,16 +200,6 @@ namespace <#= Configuration.Namespace#>.Clients
 		public <#=definition.Name#><#= Configuration.ClientSuffix#> <#= definition.Name #> { get; }
 <# } #>
 		
-		protected IEnumerable<ClientBase> Clients
-		{
-			get
-			{
-<# foreach(var definition in Configuration.Metadata.Definitions) { #>
-				yield return <#= definition.Name #>;
-<# } #>
-			}
-		}
-
 		public WebApiClients(Uri apiRootUri = null)
 		{
 			var apiRoot = apiRootUri?.AbsoluteUri
