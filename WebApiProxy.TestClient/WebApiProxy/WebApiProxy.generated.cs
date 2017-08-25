@@ -9,10 +9,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-using System.Net;
+using Newtonsoft.Json;
 using WebApiProxy.TestClient.Models;
 
 #region Models
@@ -97,6 +100,35 @@ namespace WebApiProxy.TestClient.Models
 
 namespace WebApiProxy.TestClient.Clients
 {
+    internal static class HttpClientExtensions
+    {
+        readonly static JsonSerializer serializer = new JsonSerializer();
+
+        public static async Task<T> ReadAsAsync<T>(this HttpContent content)
+        {
+            using (var stream = await content.ReadAsStreamAsync())
+            using (var sr     = new StreamReader(stream))
+            using (var reader = new JsonTextReader(sr))
+                return serializer.Deserialize<T>(reader);
+        }
+
+        public static async Task<HttpResponseMessage> PostAsJsonAsync<T>(this HttpClient client, string path, T value)
+        {
+            using (var ms = new MemoryStream())
+            { 
+                using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpen: true))
+                using (var writer = new JsonTextWriter(sw))
+                    serializer.Serialize(writer, value);
+
+                ms.Position = 0;
+                var content = new StreamContent(ms);
+                content.Headers.Add("Content-Type", "application/json");
+
+                return await client.PostAsync(path, content);
+            }
+        }
+    }
+
 	/// <summary>
 	/// Client base class.
 	/// </summary>
@@ -197,14 +229,6 @@ namespace WebApiProxy.TestClient.Clients
 	{
 		public ValuesClient Values { get; }
 		
-		protected IEnumerable<ClientBase> Clients
-		{
-			get
-			{
-				yield return Values;
-			}
-		}
-
 		public WebApiClients(Uri apiRootUri = null)
 		{
 			var apiRoot = apiRootUri?.AbsoluteUri

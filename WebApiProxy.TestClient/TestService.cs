@@ -19,8 +19,12 @@ namespace WebApiProxy.TestClient
             Assert.IsNotNull(first);
             Assert.AreEqual(Models.ItemTestEnum.One, first.Value);
 
+            // Get
             var fourth  = await clients.Values.GetAsync(Models.ItemTestEnum.Four);
             Assert.IsNull(fourth);
+
+            // Put
+            await clients.Values.PostAsync(fourth);
         }
     }
 }
