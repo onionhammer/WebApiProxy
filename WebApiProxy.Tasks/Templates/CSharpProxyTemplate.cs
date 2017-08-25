@@ -270,48 +270,48 @@ using ");
                     "ze(writer, value);\r\n\r\n                ms.Position = 0;\r\n                var cont" +
                     "ent = new StreamContent(ms);\r\n                content.Headers.Add(\"Content-Type\"" +
                     ", \"application/json\");\r\n\r\n                return await client.PostAsync(path, co" +
-                    "ntent);\r\n            }\r\n        }\r\n\t\t\r\n        public static async Task<HttpResp" +
-                    "onseMessage> PostAsJsonAsync<T>(this HttpClient client, string path, T value)\r\n " +
-                    "       {\r\n            using (var ms = new MemoryStream())\r\n            { \r\n     " +
-                    "           using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpe" +
-                    "n: true))\r\n                using (var writer = new JsonTextWriter(sw))\r\n        " +
-                    "            serializer.Serialize(writer, value);\r\n\r\n                ms.Position " +
-                    "= 0;\r\n                var content = new StreamContent(ms);\r\n                cont" +
-                    "ent.Headers.Add(\"Content-Type\", \"application/json\");\r\n\r\n                return a" +
-                    "wait client.PostAsync(path, content);\r\n            }\r\n        }\r\n    }\r\n\r\n\t/// <" +
-                    "summary>\r\n\t/// Client base class.\r\n\t/// </summary>\r\n\tpublic abstract partial cla" +
-                    "ss ClientBase : IDisposable\r\n\t{\r\n\t\t/// <summary>\r\n\t\t/// Gets the HttpClient.\r\n\t\t" +
-                    "/// </summary>\r\n\t\tpublic HttpClient HttpClient { get; }\r\n\r\n\t\t/// <summary>\r\n\t\t//" +
-                    "/ Initializes a new instance of the <see cref=\"ClientBase\"/> class.\r\n\t\t/// </sum" +
-                    "mary>\r\n\t\tprotected ClientBase(string apiRoot)\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClie" +
-                    "nt()\r\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t" +
-                    "\t/// Initializes a new instance of the <see cref=\"ClientBase\"/> class.\r\n\t\t/// </" +
-                    "summary>\r\n\t\t/// <param name=\"handler\">The handler.</param>\r\n\t\t/// <param name=\"d" +
-                    "isposeHandler\">if set to <c>true</c> [dispose handler].</param>\r\n\t\tprotected Cli" +
-                    "entBase(HttpMessageHandler handler, bool disposeHandler = true, string apiRoot =" +
-                    " null)\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClient(handler, disposeHandler)\r\n\t\t\t{\r\n\t\t\t\t" +
-                    "BaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Ensures t" +
-                    "hat response has a valid (200 - OK) status code\r\n\t\t/// </summary>\r\n\t\tpublic virt" +
-                    "ual async Task EnsureSuccessAsync(HttpResponseMessage response)\r\n\t\t{\t\t\t\r\n\t\t\tif (" +
-                    "response.IsSuccessStatusCode)\r\n\t\t\t\treturn;\r\n\r\n\t\t\tvar content = await response.Co" +
-                    "ntent.ReadAsStringAsync();\r\n\t\t\tthrow new WebApiProxyResponseException(response.S" +
-                    "tatusCode, content);\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/// Encode the input parameter a" +
-                    "s a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeParam<T>(T value) =>\r\n\t\t\t" +
-                    "value == null\r\n\t\t\t\t ? string.Empty\r\n\t\t\t\t : System.Net.WebUtility.UrlEncode(value" +
-                    ".ToString());\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode the input parameter as a string" +
-                    "\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeParam(DateTime value) =>\r\n\t\t\tSystem" +
-                    ".Net.WebUtility.UrlEncode(value.ToString(\"s\"));\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Enco" +
-                    "de the input parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeP" +
-                    "aram(DateTimeOffset value) =>\r\n\t\t\tSystem.Net.WebUtility.UrlEncode(value.ToString" +
-                    "(\"s\"));\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the unmanaged resources and dispose" +
-                    "s of the managed resources.       \r\n\t\t/// </summary>\r\n\t\tprotected virtual void D" +
-                    "ispose(bool disposing)\r\n\t\t{\r\n\t\t\tif (disposing && HttpClient != null)\r\n\t\t\t\tHttpCl" +
-                    "ient.Dispose();\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the unmanaged resource" +
-                    "s and disposes of the managed resources.       \r\n\t\t/// </summary>\r\n\t\tpublic void" +
-                    " Dispose()\r\n\t\t{\r\n\t\t\tDispose(true);\r\n\t\t\tGC.SuppressFinalize(this);\r\n\t\t}\r\n\t\t\r\n\t\t//" +
-                    "/ <summary>\r\n\t\t/// Destructor\r\n\t\t/// </summary>\r\n\t\t~ClientBase() \r\n\t\t{\r\n\t\t\tDispo" +
-                    "se(false);\r\n\t\t}\r\n\t}\r\n\r\n\t/// <summary>\r\n\t/// Helper class to access all clients a" +
-                    "t once\r\n\t/// </summary>\r\n\tpublic partial class WebApiClients\r\n\t{\r\n");
+                    "ntent);\r\n            }\r\n        }\r\n\r\n        public static async Task<HttpRespon" +
+                    "seMessage> PutAsJsonAsync<T>(this HttpClient client, string path, T value)\r\n    " +
+                    "    {\r\n            using (var ms = new MemoryStream())\r\n            {\r\n         " +
+                    "       using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpen: t" +
+                    "rue))\r\n                using (var writer = new JsonTextWriter(sw))\r\n            " +
+                    "        serializer.Serialize(writer, value);\r\n\r\n                ms.Position = 0;" +
+                    "\r\n                var content = new StreamContent(ms);\r\n                content." +
+                    "Headers.Add(\"Content-Type\", \"application/json\");\r\n\r\n                return await" +
+                    " client.PutAsync(path, content);\r\n            }\r\n        }\r\n    }\r\n\r\n\t/// <summa" +
+                    "ry>\r\n\t/// Client base class.\r\n\t/// </summary>\r\n\tpublic abstract partial class Cl" +
+                    "ientBase : IDisposable\r\n\t{\r\n\t\t/// <summary>\r\n\t\t/// Gets the HttpClient.\r\n\t\t/// <" +
+                    "/summary>\r\n\t\tpublic HttpClient HttpClient { get; }\r\n\r\n\t\t/// <summary>\r\n\t\t/// Ini" +
+                    "tializes a new instance of the <see cref=\"ClientBase\"/> class.\r\n\t\t/// </summary>" +
+                    "\r\n\t\tprotected ClientBase(string apiRoot)\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClient()\r" +
+                    "\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/// " +
+                    "Initializes a new instance of the <see cref=\"ClientBase\"/> class.\r\n\t\t/// </summa" +
+                    "ry>\r\n\t\t/// <param name=\"handler\">The handler.</param>\r\n\t\t/// <param name=\"dispos" +
+                    "eHandler\">if set to <c>true</c> [dispose handler].</param>\r\n\t\tprotected ClientBa" +
+                    "se(HttpMessageHandler handler, bool disposeHandler = true, string apiRoot = null" +
+                    ")\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClient(handler, disposeHandler)\r\n\t\t\t{\r\n\t\t\t\tBaseA" +
+                    "ddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Ensures that r" +
+                    "esponse has a valid (200 - OK) status code\r\n\t\t/// </summary>\r\n\t\tpublic virtual a" +
+                    "sync Task EnsureSuccessAsync(HttpResponseMessage response)\r\n\t\t{\t\t\t\r\n\t\t\tif (respo" +
+                    "nse.IsSuccessStatusCode)\r\n\t\t\t\treturn;\r\n\r\n\t\t\tvar content = await response.Content" +
+                    ".ReadAsStringAsync();\r\n\t\t\tthrow new WebApiProxyResponseException(response.Status" +
+                    "Code, content);\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/// Encode the input parameter as a s" +
+                    "tring\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeParam<T>(T value) =>\r\n\t\t\tvalue" +
+                    " == null\r\n\t\t\t\t ? string.Empty\r\n\t\t\t\t : System.Net.WebUtility.UrlEncode(value.ToSt" +
+                    "ring());\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode the input parameter as a string\r\n\t\t/" +
+                    "// </summary>\r\n\t\tprotected string EncodeParam(DateTime value) =>\r\n\t\t\tSystem.Net." +
+                    "WebUtility.UrlEncode(value.ToString(\"s\"));\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode th" +
+                    "e input parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeParam(" +
+                    "DateTimeOffset value) =>\r\n\t\t\tSystem.Net.WebUtility.UrlEncode(value.ToString(\"s\")" +
+                    ");\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the unmanaged resources and disposes of " +
+                    "the managed resources.       \r\n\t\t/// </summary>\r\n\t\tprotected virtual void Dispos" +
+                    "e(bool disposing)\r\n\t\t{\r\n\t\t\tif (disposing && HttpClient != null)\r\n\t\t\t\tHttpClient." +
+                    "Dispose();\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the unmanaged resources and" +
+                    " disposes of the managed resources.       \r\n\t\t/// </summary>\r\n\t\tpublic void Disp" +
+                    "ose()\r\n\t\t{\r\n\t\t\tDispose(true);\r\n\t\t\tGC.SuppressFinalize(this);\r\n\t\t}\r\n\t\t\r\n\t\t/// <su" +
+                    "mmary>\r\n\t\t/// Destructor\r\n\t\t/// </summary>\r\n\t\t~ClientBase() \r\n\t\t{\r\n\t\t\tDispose(fa" +
+                    "lse);\r\n\t\t}\r\n\t}\r\n\r\n\t/// <summary>\r\n\t/// Helper class to access all clients at onc" +
+                    "e\r\n\t/// </summary>\r\n\tpublic partial class WebApiClients\r\n\t{\r\n");
             
             #line 247 "C:\Development\WebApiProxy\WebApiProxy.Tasks\Templates\CSharpProxyTemplate.tt"
  foreach(var definition in Configuration.Metadata.Definitions) { 
