@@ -26,7 +26,7 @@
     
     <file src="init.ps1" target="tools" />
     <file src="WebApiProxyCSharp.psm1" target="tools" />
-    <file src="bin\Debug\*.dll" target="tools" />
-    <file src="bin\Debug\*.targets" target="tools" />
+    <file src="bin\$configuration$\*.dll" target="tools" />
+    <file src="bin\$configuration$\*.targets" target="tools" />
   </files>
 </package>
