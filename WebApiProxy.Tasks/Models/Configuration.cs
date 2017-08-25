@@ -56,6 +56,9 @@ namespace WebApiProxy.Tasks.Models
                 Namespace = apiNamespace
             };
 
+            if (Directory.Exists(webapiRoot) == false)
+                Directory.CreateDirectory(webapiRoot);
+
             var serializer = new XmlSerializer(typeof(Configuration), new XmlRootAttribute("proxy"));
             using (var writer = new StreamWriter(filename))
                 serializer.Serialize(writer, newConfig);
