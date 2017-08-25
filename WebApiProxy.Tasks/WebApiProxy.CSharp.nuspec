@@ -15,14 +15,22 @@
     <dependencies>
       <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
     </dependencies>
+    <contentFiles>
+      <files include="WebApiProxy/WebApiProxy.config" buildAction="None" />
+      <files include="WebApiProxy/WebApiProxy.generated.cs" buildAction="Compile" />
+      <files include="bin/$configuration$/*.dll" buildAction="None" />
+      <files include="bin/$configuration$/*.targets" buildAction="None" />
+    </contentFiles>
   </metadata>
   <files>
+    <file src="WebApiProxy\WebApiProxy.config" target="content\WebApiProxy\WebApiProxy.config" />
+    <file src="WebApiProxy\WebApiProxy.config" target="contentFiles\any\any\WebApiProxy\WebApiProxy.config" />
+    <file src="WebApiProxy\WebApiProxy.generated.cs" target="content\WebApiProxy\WebApiProxy.generated.cs" />
+    <file src="WebApiProxy\WebApiProxy.generated.cs" target="contentFiles\cs\any\WebApiProxy\WebApiProxy.generated.cs" />
+    
+    <file src="init.ps1" target="tools" />
+    <file src="WebApiProxyCSharp.psm1" target="tools" />
     <file src="bin\$configuration$\*.dll" target="build" />
     <file src="bin\$configuration$\*.targets" target="build" />
-    
-    <file src="bin\$configuration$\WebApiProxy.config" target="content\WebApiProxy" />
-    <file src="bin\$configuration$\WebApiProxy.generated.cs" target="content\WebApiProxy" />
-    <file src="bin\$configuration$\init.ps1" target="tools" />
-    <file src="bin\$configuration$\WebApiProxyCSharp.psm1" target="tools" />
   </files>
 </package>
