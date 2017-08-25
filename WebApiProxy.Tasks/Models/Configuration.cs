@@ -34,17 +34,33 @@ namespace WebApiProxy.Tasks.Models
         [XmlIgnore]
         public Metadata Metadata { get; set; }
 
-        public static Configuration Load(string root)
+        public static Configuration Load(string webapiRoot)
         {
-            var fileName = Path.Combine(root, Configuration.ConfigFileName);
+            var filename = Path.Combine(webapiRoot, Configuration.ConfigFileName);
 
-            if (!File.Exists(fileName))
-                throw new ConfigFileNotFoundException(fileName);
+            if (!File.Exists(filename))
+                return null;
 
             var serializer = new XmlSerializer(typeof(Configuration), new XmlRootAttribute("proxy"));
-
-            using (var reader = new StreamReader(fileName))
+            using (var reader = new StreamReader(filename))
                 return serializer.Deserialize(reader) as Configuration;
+        }
+
+        public static Configuration Create(string webapiRoot, string apiEndpoint, string apiNamespace)
+        {
+            var filename = Path.Combine(webapiRoot, Configuration.ConfigFileName);
+
+            var newConfig = new Configuration
+            {
+                Endpoint  = apiEndpoint,
+                Namespace = apiNamespace
+            };
+
+            var serializer = new XmlSerializer(typeof(Configuration), new XmlRootAttribute("proxy"));
+            using (var writer = new StreamWriter(filename))
+                serializer.Serialize(writer, newConfig);
+
+            return newConfig;
         }
     }
 }

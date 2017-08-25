@@ -16,7 +16,15 @@
         Add-Type -Path $tasksPath
 		
         # Load configuration
-        $config    = [WebApiProxy.Tasks.Models.Configuration]::Load($configPath);
+        $config = [WebApiProxy.Tasks.Models.Configuration]::Load($configPath);
+
+		if ($config -eq $null) {
+			$endpoint  = Read-Host "API Endpoint URL (e.g. http://localhost:51502/api/proxies)"
+			$namespace = Read-Host "API namespace (e.g. MyProject.API)"
+
+			$config = [WebApiProxy.Tasks.Models.Configuration]::Create($configPath, $endpoint, $namespace);
+		}
+
         $generator = New-Object WebApiProxy.Tasks.Infrastructure.CSharpGenerator -ArgumentList @($config)
 	
         # Generate code

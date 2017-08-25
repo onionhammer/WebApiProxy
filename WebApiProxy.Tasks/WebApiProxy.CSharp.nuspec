@@ -16,14 +16,12 @@
       <dependency id="Microsoft.AspNet.WebApi.Client" version="5.2.3" />
     </dependencies>
     <contentFiles>
-      <files include="**/*.config" buildAction="None" />
+      <files include="WebApiProxy/*.config" buildAction="None" />
     </contentFiles>
   </metadata>
   <files>
     <file src="WebApiProxy\WebApiProxy.config" target="content\WebApiProxy\WebApiProxy.config" />
     <file src="WebApiProxy\WebApiProxy.generated.cs" target="content\WebApiProxy\WebApiProxy.generated.cs" />
-    <file src="WebApiProxy\WebApiProxy.config" target="contentFiles\cs\any\WebApiProxy\WebApiProxy.config" />
-    <file src="WebApiProxy\WebApiProxy.generated.cs" target="contentFiles\cs\any\WebApiProxy\WebApiProxy.generated.cs" />
     
     <file src="init.ps1" target="tools" />
     <file src="WebApiProxyCSharp.psm1" target="tools" />

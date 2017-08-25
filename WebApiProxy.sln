@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiProxy.TestClient", "W
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiProxy.TestGenerateClient", "WebApiProxy.TestGenerateClient\WebApiProxy.TestGenerateClient.csproj", "{30B51819-2222-4C24-B943-F891B5C9EA30}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiProxy.TestNetStandard", "WebApiProxy.TestNetStandard\WebApiProxy.TestNetStandard.csproj", "{F1E4317F-53B2-4DFA-9A25-D63C108C467B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,10 +47,6 @@ Global
 		{30B51819-2222-4C24-B943-F891B5C9EA30}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30B51819-2222-4C24-B943-F891B5C9EA30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30B51819-2222-4C24-B943-F891B5C9EA30}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1E4317F-53B2-4DFA-9A25-D63C108C467B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1E4317F-53B2-4DFA-9A25-D63C108C467B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1E4317F-53B2-4DFA-9A25-D63C108C467B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1E4317F-53B2-4DFA-9A25-D63C108C467B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,7 +55,6 @@ Global
 		{6FC4DBB6-1C6A-4B9B-B362-D2688AB9A049} = {15B83F07-91D8-41A1-B36F-178348D70B1E}
 		{27545ED2-BE6A-44B9-AEE7-BDBE058E4ED8} = {15B83F07-91D8-41A1-B36F-178348D70B1E}
 		{30B51819-2222-4C24-B943-F891B5C9EA30} = {15B83F07-91D8-41A1-B36F-178348D70B1E}
-		{F1E4317F-53B2-4DFA-9A25-D63C108C467B} = {15B83F07-91D8-41A1-B36F-178348D70B1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {07C17D38-DC55-47A7-9570-BE0C8C90367F}
