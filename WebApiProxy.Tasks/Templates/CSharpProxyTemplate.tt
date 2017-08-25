@@ -144,6 +144,26 @@ namespace <#= Configuration.Namespace#>.Clients
                 return await client.PutAsync(path, content);
             }
         }
+		
+        public static async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, string path, T value)
+        {
+            using (var ms = new MemoryStream())
+            { 
+                using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpen: true))
+                using (var writer = new JsonTextWriter(sw))
+                    serializer.Serialize(writer, value);
+
+                ms.Position = 0;
+                var content = new StreamContent(ms);
+                content.Headers.Add("Content-Type", "application/json");
+
+                using (var msg = new HttpRequestMessage(new HttpMethod("PATCH"), path))
+                {
+                    msg.Content = content;
+                    return await client.SendAsync(msg);
+                }
+            }
+        }
     }
 
 	/// <summary>
