@@ -5,7 +5,7 @@
     $generateJob = Start-Job -ScriptBlock { 
         param($projectPath, $nugetPath)
 
-        $tasksPath     = Join-Path $nugetPath "build\WebApiProxy.Tasks.dll"
+        $tasksPath     = Join-Path $nugetPath "tools\WebApiProxy.Tasks.dll"
         $configPath    = Join-Path $projectPath "WebApiProxy\"
         $generatedPath = Join-Path $projectPath "WebApiProxy\WebApiProxy.generated.cs"
 
