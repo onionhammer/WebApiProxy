@@ -4,7 +4,7 @@
     <id>WebApiProxy.CSharp</id>
     <title>$title$</title>
     <projectUrl>https://github.com/onionhammer/WebApiProxy</projectUrl>
-    <version>$version$</version>
+    <version>1.0</version>
     <authors>Fanie Reynders</authors>
     <owners>Fanie Reynders</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,7 +14,7 @@
     <tags>AspNet WebAPI Proxy JavaScript CSharp</tags>
     <dependencies>
       <dependency id="System.Net.Http" version="4.3.2" />
-	  <dependency id="Newtonsoft.Json" version="10.0.2" />
+	    <dependency id="Newtonsoft.Json" version="10.0.2" />
     </dependencies>
     <contentFiles>
       <files include="WebApiProxy/*.config" buildAction="None" />
@@ -26,7 +26,7 @@
     
     <file src="init.ps1" target="tools" />
     <file src="WebApiProxyCSharp.psm1" target="tools" />
-    <file src="bin\$configuration$\*.dll" target="tools" />
-    <file src="bin\$configuration$\*.targets" target="tools" />
+    <file src="bin\*.dll" target="tools" />
+    <file src="bin\*.targets" target="tools" />
   </files>
 </package>
