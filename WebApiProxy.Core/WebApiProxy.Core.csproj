@@ -42,7 +42,6 @@
     <Compile Include="ConnectionException.cs" />
     <Compile Include="Models\ConstantDefinition.cs" />
     <Compile Include="Models\ControllerDefinition.cs" />
-    <Compile Include="ExcludeProxy.cs" />
     <Compile Include="Models\Metadata.cs" />
     <Compile Include="Models\ModelDefinition.cs" />
     <Compile Include="Models\ModelDefinitionEqualityComparer.cs" />
