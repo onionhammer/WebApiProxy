@@ -13,4 +13,7 @@
     <copyright>$copyright$</copyright>
     <tags>AspNet WebAPI Proxy JavaScript CSharp</tags>
   </metadata>
+  <files>
+    <file src="bin\$configuration$\WebApiProxy.Core.dll" target="lib\net461" />
+  </files>
 </package>
