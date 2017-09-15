@@ -265,64 +265,64 @@ using ");
                     "    }\r\n\r\n        public static async Task<HttpResponseMessage> PostAsJsonAsync<T" +
                     ">(this HttpClient client, string path, T value)\r\n        {\r\n            using (v" +
                     "ar ms = new MemoryStream())\r\n            { \r\n                using (var sw = new" +
-                    " StreamWriter(ms, Encoding.Default, 8192, leaveOpen: true))\r\n                usi" +
-                    "ng (var writer = new JsonTextWriter(sw))\r\n                    serializer.Seriali" +
-                    "ze(writer, value);\r\n\r\n                ms.Position = 0;\r\n                var cont" +
-                    "ent = new StreamContent(ms);\r\n                content.Headers.Add(\"Content-Type\"" +
-                    ", \"application/json\");\r\n\r\n                return await client.PostAsync(path, co" +
-                    "ntent);\r\n            }\r\n        }\r\n\r\n        public static async Task<HttpRespon" +
-                    "seMessage> PutAsJsonAsync<T>(this HttpClient client, string path, T value)\r\n    " +
-                    "    {\r\n            using (var ms = new MemoryStream())\r\n            {\r\n         " +
-                    "       using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpen: t" +
-                    "rue))\r\n                using (var writer = new JsonTextWriter(sw))\r\n            " +
-                    "        serializer.Serialize(writer, value);\r\n\r\n                ms.Position = 0;" +
-                    "\r\n                var content = new StreamContent(ms);\r\n                content." +
-                    "Headers.Add(\"Content-Type\", \"application/json\");\r\n\r\n                return await" +
-                    " client.PutAsync(path, content);\r\n            }\r\n        }\r\n\t\t\r\n        public s" +
-                    "tatic async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client" +
-                    ", string path, T value)\r\n        {\r\n            using (var ms = new MemoryStream" +
-                    "())\r\n            { \r\n                using (var sw = new StreamWriter(ms, Encodi" +
-                    "ng.Default, 8192, leaveOpen: true))\r\n                using (var writer = new Jso" +
-                    "nTextWriter(sw))\r\n                    serializer.Serialize(writer, value);\r\n\r\n  " +
-                    "              ms.Position = 0;\r\n                var content = new StreamContent(" +
-                    "ms);\r\n                content.Headers.Add(\"Content-Type\", \"application/json\");\r\n" +
-                    "\r\n                using (var msg = new HttpRequestMessage(new HttpMethod(\"PATCH\"" +
-                    "), path))\r\n                {\r\n                    msg.Content = content;\r\n      " +
-                    "              return await client.SendAsync(msg);\r\n                }\r\n          " +
-                    "  }\r\n        }\r\n    }\r\n\r\n\t/// <summary>\r\n\t/// Client base class.\r\n\t/// </summary" +
-                    ">\r\n\tpublic abstract partial class ClientBase : IDisposable\r\n\t{\r\n\t\t/// <summary>\r" +
-                    "\n\t\t/// Gets the HttpClient.\r\n\t\t/// </summary>\r\n\t\tpublic HttpClient HttpClient { " +
-                    "get; }\r\n\r\n\t\t/// <summary>\r\n\t\t/// Initializes a new instance of the <see cref=\"Cl" +
-                    "ientBase\"/> class.\r\n\t\t/// </summary>\r\n\t\tprotected ClientBase(string apiRoot)\r\n\t\t" +
-                    "{\r\n\t\t\tHttpClient = new HttpClient()\r\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t" +
-                    "\t\t};\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/// Initializes a new instance of the <see cref=" +
-                    "\"ClientBase\"/> class.\r\n\t\t/// </summary>\r\n\t\t/// <param name=\"handler\">The handler" +
-                    ".</param>\r\n\t\t/// <param name=\"disposeHandler\">if set to <c>true</c> [dispose han" +
-                    "dler].</param>\r\n\t\tprotected ClientBase(HttpMessageHandler handler, bool disposeH" +
-                    "andler = true, string apiRoot = null)\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClient(handl" +
-                    "er, disposeHandler)\r\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\t\t\r\n\t" +
-                    "\t/// <summary>\r\n\t\t/// Ensures that response has a valid (200 - OK) status code\r\n" +
-                    "\t\t/// </summary>\r\n\t\tpublic virtual async Task EnsureSuccessAsync(HttpResponseMes" +
-                    "sage response)\r\n\t\t{\t\t\t\r\n\t\t\tif (response.IsSuccessStatusCode)\r\n\t\t\t\treturn;\r\n\r\n\t\t\t" +
-                    "var content = await response.Content.ReadAsStringAsync();\r\n\t\t\tthrow new WebApiPr" +
-                    "oxyResponseException(response.StatusCode, content);\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/" +
-                    "// Encode the input parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string " +
-                    "EncodeParam<T>(T value) =>\r\n\t\t\tvalue == null\r\n\t\t\t\t ? string.Empty\r\n\t\t\t\t : System" +
-                    ".Net.WebUtility.UrlEncode(value.ToString());\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode " +
-                    "the input parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodePara" +
-                    "m(DateTime value) =>\r\n\t\t\tSystem.Net.WebUtility.UrlEncode(value.ToString(\"s\"));\r\n" +
-                    "\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode the input parameter as a string\r\n\t\t/// </summa" +
-                    "ry>\r\n\t\tprotected string EncodeParam(DateTimeOffset value) =>\r\n\t\t\tSystem.Net.WebU" +
-                    "tility.UrlEncode(value.ToString(\"s\"));\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the " +
-                    "unmanaged resources and disposes of the managed resources.       \r\n\t\t/// </summa" +
-                    "ry>\r\n\t\tprotected virtual void Dispose(bool disposing)\r\n\t\t{\r\n\t\t\tif (disposing && " +
-                    "HttpClient != null)\r\n\t\t\t\tHttpClient.Dispose();\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// " +
-                    "Releases the unmanaged resources and disposes of the managed resources.       \r\n" +
-                    "\t\t/// </summary>\r\n\t\tpublic void Dispose()\r\n\t\t{\r\n\t\t\tDispose(true);\r\n\t\t\tGC.Suppres" +
-                    "sFinalize(this);\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Destructor\r\n\t\t/// </summary>\r\n" +
-                    "\t\t~ClientBase() \r\n\t\t{\r\n\t\t\tDispose(false);\r\n\t\t}\r\n\t}\r\n\r\n\t/// <summary>\r\n\t/// Helpe" +
-                    "r class to access all clients at once\r\n\t/// </summary>\r\n\tpublic partial class We" +
-                    "bApiClients\r\n\t{\r\n");
+                    " StreamWriter(ms, Encoding.UTF8, 8192, leaveOpen: true))\r\n                using " +
+                    "(var writer = new JsonTextWriter(sw))\r\n                    serializer.Serialize(" +
+                    "writer, value);\r\n\r\n                ms.Position = 0;\r\n                var content" +
+                    " = new StreamContent(ms);\r\n                content.Headers.Add(\"Content-Type\", \"" +
+                    "application/json\");\r\n\r\n                return await client.PostAsync(path, conte" +
+                    "nt);\r\n            }\r\n        }\r\n\r\n        public static async Task<HttpResponseM" +
+                    "essage> PutAsJsonAsync<T>(this HttpClient client, string path, T value)\r\n       " +
+                    " {\r\n            using (var ms = new MemoryStream())\r\n            {\r\n            " +
+                    "    using (var sw = new StreamWriter(ms, Encoding.UTF8, 8192, leaveOpen: true))\r" +
+                    "\n                using (var writer = new JsonTextWriter(sw))\r\n                  " +
+                    "  serializer.Serialize(writer, value);\r\n\r\n                ms.Position = 0;\r\n    " +
+                    "            var content = new StreamContent(ms);\r\n                content.Header" +
+                    "s.Add(\"Content-Type\", \"application/json\");\r\n\r\n                return await clien" +
+                    "t.PutAsync(path, content);\r\n            }\r\n        }\r\n\t\t\r\n        public static " +
+                    "async Task<HttpResponseMessage> PatchAsJsonAsync<T>(this HttpClient client, stri" +
+                    "ng path, T value)\r\n        {\r\n            using (var ms = new MemoryStream())\r\n " +
+                    "           { \r\n                using (var sw = new StreamWriter(ms, Encoding.UTF" +
+                    "8, 8192, leaveOpen: true))\r\n                using (var writer = new JsonTextWrit" +
+                    "er(sw))\r\n                    serializer.Serialize(writer, value);\r\n\r\n           " +
+                    "     ms.Position = 0;\r\n                var content = new StreamContent(ms);\r\n   " +
+                    "             content.Headers.Add(\"Content-Type\", \"application/json\");\r\n\r\n       " +
+                    "         using (var msg = new HttpRequestMessage(new HttpMethod(\"PATCH\"), path))" +
+                    "\r\n                {\r\n                    msg.Content = content;\r\n               " +
+                    "     return await client.SendAsync(msg);\r\n                }\r\n            }\r\n    " +
+                    "    }\r\n    }\r\n\r\n\t/// <summary>\r\n\t/// Client base class.\r\n\t/// </summary>\r\n\tpubli" +
+                    "c abstract partial class ClientBase : IDisposable\r\n\t{\r\n\t\t/// <summary>\r\n\t\t/// Ge" +
+                    "ts the HttpClient.\r\n\t\t/// </summary>\r\n\t\tpublic HttpClient HttpClient { get; }\r\n\r" +
+                    "\n\t\t/// <summary>\r\n\t\t/// Initializes a new instance of the <see cref=\"ClientBase\"" +
+                    "/> class.\r\n\t\t/// </summary>\r\n\t\tprotected ClientBase(string apiRoot)\r\n\t\t{\r\n\t\t\tHtt" +
+                    "pClient = new HttpClient()\r\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}" +
+                    "\r\n\r\n\t\t/// <summary>\r\n\t\t/// Initializes a new instance of the <see cref=\"ClientBa" +
+                    "se\"/> class.\r\n\t\t/// </summary>\r\n\t\t/// <param name=\"handler\">The handler.</param>" +
+                    "\r\n\t\t/// <param name=\"disposeHandler\">if set to <c>true</c> [dispose handler].</p" +
+                    "aram>\r\n\t\tprotected ClientBase(HttpMessageHandler handler, bool disposeHandler = " +
+                    "true, string apiRoot = null)\r\n\t\t{\r\n\t\t\tHttpClient = new HttpClient(handler, dispo" +
+                    "seHandler)\r\n\t\t\t{\r\n\t\t\t\tBaseAddress = new Uri(apiRoot)\r\n\t\t\t};\r\n\t\t}\r\n\t\t\r\n\t\t/// <sum" +
+                    "mary>\r\n\t\t/// Ensures that response has a valid (200 - OK) status code\r\n\t\t/// </s" +
+                    "ummary>\r\n\t\tpublic virtual async Task EnsureSuccessAsync(HttpResponseMessage resp" +
+                    "onse)\r\n\t\t{\t\t\t\r\n\t\t\tif (response.IsSuccessStatusCode)\r\n\t\t\t\treturn;\r\n\r\n\t\t\tvar conte" +
+                    "nt = await response.Content.ReadAsStringAsync();\r\n\t\t\tthrow new WebApiProxyRespon" +
+                    "seException(response.StatusCode, content);\r\n\t\t}\r\n\r\n\t\t/// <summary>\r\n\t\t/// Encode" +
+                    " the input parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodePar" +
+                    "am<T>(T value) =>\r\n\t\t\tvalue == null\r\n\t\t\t\t ? string.Empty\r\n\t\t\t\t : System.Net.WebU" +
+                    "tility.UrlEncode(value.ToString());\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Encode the input" +
+                    " parameter as a string\r\n\t\t/// </summary>\r\n\t\tprotected string EncodeParam(DateTim" +
+                    "e value) =>\r\n\t\t\tSystem.Net.WebUtility.UrlEncode(value.ToString(\"s\"));\r\n\t\t\r\n\t\t///" +
+                    " <summary>\r\n\t\t/// Encode the input parameter as a string\r\n\t\t/// </summary>\r\n\t\tpr" +
+                    "otected string EncodeParam(DateTimeOffset value) =>\r\n\t\t\tSystem.Net.WebUtility.Ur" +
+                    "lEncode(value.ToString(\"s\"));\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases the unmanaged" +
+                    " resources and disposes of the managed resources.       \r\n\t\t/// </summary>\r\n\t\tpr" +
+                    "otected virtual void Dispose(bool disposing)\r\n\t\t{\r\n\t\t\tif (disposing && HttpClien" +
+                    "t != null)\r\n\t\t\t\tHttpClient.Dispose();\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Releases " +
+                    "the unmanaged resources and disposes of the managed resources.       \r\n\t\t/// </s" +
+                    "ummary>\r\n\t\tpublic void Dispose()\r\n\t\t{\r\n\t\t\tDispose(true);\r\n\t\t\tGC.SuppressFinalize" +
+                    "(this);\r\n\t\t}\r\n\t\t\r\n\t\t/// <summary>\r\n\t\t/// Destructor\r\n\t\t/// </summary>\r\n\t\t~Client" +
+                    "Base() \r\n\t\t{\r\n\t\t\tDispose(false);\r\n\t\t}\r\n\t}\r\n\r\n\t/// <summary>\r\n\t/// Helper class t" +
+                    "o access all clients at once\r\n\t/// </summary>\r\n\tpublic partial class WebApiClien" +
+                    "ts\r\n\t{\r\n");
             
             #line 267 "C:\Development\WebApiProxy\WebApiProxy.Tasks\Templates\CSharpProxyTemplate.tt"
  foreach(var definition in Configuration.Metadata.Definitions) { 

@@ -116,7 +116,7 @@ namespace WebApiProxy.TestClient.Clients
         {
             using (var ms = new MemoryStream())
             { 
-                using (var sw = new StreamWriter(ms, Encoding.Default, 8192, leaveOpen: true))
+                using (var sw = new StreamWriter(ms, Encoding.UTF8, 8192, leaveOpen: true))
                 using (var writer = new JsonTextWriter(sw))
                     serializer.Serialize(writer, value);
 
